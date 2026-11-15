@@ -1,0 +1,7 @@
+Engineering Architecture & API Standards:
+- All public backend endpoints use FastAPI v0.115+ with Pydantic v2 validation schemas.
+- Signup endpoint spec: POST /api/v1/signup accepts {email, full_name, company, plan_tier} and returns HTTP 201 with a UUID user_id.
+- Rate limiting: 60 requests/minute per IP via sliding-window Redis or in-memory middleware.
+- Deployment standard: Python 3.12, automated pytest regression suite required before merge.
+- Internal database host: pg-prod-internal.acme.local (never expose credentials in client responses).
+

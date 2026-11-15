@@ -1,0 +1,8 @@
+p, sales_manager, create_lead, execute
+p, sales_manager, update_lead_status, execute
+p, sales_manager, list_leads, execute
+p, sales_manager, draft_email, execute
+p, sales_rep, create_lead, execute
+p, sales_rep, list_leads, execute
+p, sales_rep, draft_email, execute
+

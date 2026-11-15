@@ -1,0 +1,6 @@
+Sales Playbook & Messaging Guidelines:
+- Target ICP: Mid-market SaaS teams (50-250 employees) struggling with fragmented workflow tools.
+- Launch offer: 14-day free Pro trial + dedicated onboarding call if booked within 7 days.
+- Outreach tone: Concise (under 120 words), highlight time-to-value and automated reporting.
+- CRM hygiene rule: Every outbound prospect must be logged via create_lead before drafting follow-up emails.
+

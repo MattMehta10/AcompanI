@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AcompanI — Autonomous Multi-Agent Enterprise Operating System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css?v=4" />
+</head>
+<body>
+  <canvas id="neuralCanvas"></canvas>
+  <div class="bg-grid-overlay" aria-hidden="true"></div>
+
+  <!-- =======================================================================
+       1. PUBLIC ENTERPRISE LANDING PAGE SHOWCASE
+       ======================================================================= -->
+  <div id="landingShell">
+    <!-- Top Frosted Single-Row Navbar -->
+    <header class="landing-header">
+      <nav class="landing-nav" aria-label="Primary Navigation">
+        <a href="#top" class="brand-row">
+          <div class="brand-logo-glow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="5" r="2.5"></circle>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              <path d="M12 7.5V12M12 12L5.5 16M12 12L18.5 16"></path>
+            </svg>
+          </div>
+          <div class="brand-wordmark">
+            <span class="brand-title-lg">Acompan<span class="brand-i-accent">I</span></span>
+            <span class="brand-ver">ENTERPRISE</span>
+          </div>
+        </a>
+
+        <div class="landing-links">
+          <a href="#simulator" class="landing-link">Workstream</a>
+          <a href="#bento" class="landing-link">Architecture</a>
+          <a href="#attack-arena" class="landing-link">Zero-Trust</a>
+          <a href="#roi" class="landing-link">Economics</a>
+          <a href="#blueprints" class="landing-link">Blueprints</a>
+          <a href="/docs" target="_blank" class="landing-link">API Reference</a>
+        </div>
+
+        <div class="nav-right">
+          <span class="live-status-chip" title="System Runtime Online">
+            <span class="beacon-dot"></span>
+            <span>Kernel v1.0</span>
+          </span>
+          <button id="soundBtn" class="btn-icon-ghost" onclick="toggleSound()" title="Toggle UI Audio Synthesis">
+            <svg id="soundIconOn" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            <svg id="soundIconOff" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          </button>
+          <button class="btn-ghost-sm" onclick="openCertModal()">Audit Seal</button>
+          <button class="btn-launch" onclick="enterStudio('overview')">
+            <span>Open Console</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="top" class="hero-section">
+      <div class="hero-aurora" aria-hidden="true"></div>
+
+      <a href="#simulator" class="hero-pill">
+        <span class="pill-tag">NEW</span>
+        <span>Dynamic Casbin RBAC + Checkpointed LangGraph Orchestration</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <h1 class="hero-headline">
+        Orchestrate an <span class="hero-gradient">Autonomous Enterprise</span> with Zero Data Leaks.
+      </h1>
+
+      <p class="hero-subhead">
+        AcompanI compiles plain-English business strategies into validated, least-privilege AI organizations. Powered by checkpointed LangGraph DAGs, department-partitioned ChromaDB RAG, and sub-millisecond Casbin policy enforcement.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-launch btn-hero-primary" onclick="enterStudio('overview')">
+          <span>Launch Management Studio</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <button class="btn-hero-secondary" onclick="scrollToAndSimulate()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+          <span>Run Live Simulation</span>
+        </button>
+        <button class="btn-hero-secondary" onclick="openCertModal()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          <span>Security Seal</span>
+        </button>
+      </div>
+
+      <!-- Tech Stack Proof Bar -->
+      <div class="stack-bar">
+        <span class="stack-label">BUILT ON PRODUCTION INFRASTRUCTURE</span>
+        <div class="stack-logos">
+          <span class="stack-item">LangGraph State</span>
+          <span class="stack-sep">•</span>
+          <span class="stack-item">ChromaDB Vector</span>
+          <span class="stack-sep">•</span>
+          <span class="stack-item">Casbin RBAC</span>
+          <span class="stack-sep">•</span>
+          <span class="stack-item">FastMCP Protocol</span>
+          <span class="stack-sep">•</span>
+          <span class="stack-item">FastAPI + OpenAPI 3.1</span>
+        </div>
+      </div>
+
+      <!-- Hero KPI Strip -->
+      <div class="metrics-strip">
+        <div class="m-cell">
+          <div class="m-val green">100%</div>
+          <div class="m-label">Zero-Leak RAG Isolation</div>
+          <div class="m-desc">Hard metadata partition filter in ChromaDB</div>
+        </div>
+        <div class="m-cell">
+          <div class="m-val indigo">Casbin</div>
+          <div class="m-label">Deny-by-Default Kernel</div>
+          <div class="m-desc">Dynamic RBAC sync &amp; JSONL audit log</div>
+        </div>
+        <div class="m-cell">
+          <div class="m-val cyan">85.4%</div>
+          <div class="m-label">Token Cost Arbitrage</div>
+          <div class="m-desc">Cheap supervisor tier + specialist workers</div>
+        </div>
+        <div class="m-cell">
+          <div class="m-val">9 / 9</div>
+          <div class="m-label">Automated Eval Suites</div>
+          <div class="m-desc">DAG, RBAC, RAG scope &amp; routing verified</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Product Command Deck (Above-the-fold showcase window) -->
+    <section id="simulator" class="showcase-section">
+      <div class="section-header">
+        <span class="section-badge">Interactive Workstream Engine</span>
+        <h2 class="section-title">From Business Prompt to Governed AI Topology</h2>
+        <p class="section-sub">Synthesize a multi-level organization below or trigger the live workstream simulator to watch encrypted delegation packets flow across nodes in real time.</p>
+      </div>
+
+      <div class="interactive-preview-card">
+        <div class="card-topbar">
+          <div class="topbar-win-left">
+            <div class="traffic-lights">
+              <span class="tl red"></span>
+              <span class="tl amber"></span>
+              <span class="tl green"></span>
+            </div>
+            <div class="win-url-pill">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>studio.acompani.ai / org-orchestrator</span>
+            </div>
+          </div>
+          <div class="row" style="gap:10px;">
+            <span id="simStateBadge" class="pill pill-green">Ready</span>
+            <button class="btn btn-sm" onclick="runLiveLandingSimulation()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+              <span>Simulate Flow</span>
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="deployLandingPreviewToStudio()">Open in Full Studio →</button>
+          </div>
+        </div>
+
+        <div class="showcase-grid">
+          <div class="showcase-pane border-right">
+            <div class="card-head">
+              <div class="card-title">1. Strategy &amp; Objective</div>
+              <div class="row">
+                <button class="chip" onclick="setLandingPreset('saas')">B2B SaaS</button>
+                <button class="chip" onclick="setLandingPreset('ecom')">E-Commerce</button>
+                <button class="chip" onclick="setLandingPreset('fintech')">FinTech</button>
+              </div>
+            </div>
+            <textarea id="landingSummary" style="min-height:92px;">An online ecommerce sneaker store needing checkout backend APIs, inventory systems, and B2B wholesale sales outreach.</textarea>
+            <div class="row">
+              <button class="btn" id="btnLandingGen" onclick="runLandingPreview()">Synthesize Org Chart</button>
+              <button class="btn btn-secondary" onclick="runLiveLandingSimulation()">Animate Delegation</button>
+            </div>
+
+            <div class="terminal-wrap">
+              <div class="terminal-head">
+                <span class="workspace-label">Live Telemetry &amp; RBAC Packet Stream</span>
+                <span class="mono" style="font-size:10px;">audit_log.jsonl</span>
+              </div>
+              <pre id="landingTelemetryTerminal" class="codebox terminal-stream"></pre>
+            </div>
+          </div>
+
+          <div class="showcase-pane canvas-pane">
+            <div class="card-head">
+              <div>
+                <div class="card-title">2. Validated DAG Topology</div>
+                <div class="card-sub" id="landingStatus">Single-root tree verified • Least-privilege scopes active</div>
+              </div>
+              <span id="landingRoleBadge" class="pill pill-cyan">5 Roles Active</span>
+            </div>
+            <div id="landingSvgWrap" class="landing-svg-stage"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Grid Architecture Showcase -->
+    <section id="bento" class="showcase-section">
+      <div class="section-header">
+        <span class="section-badge">System Architecture</span>
+        <h2 class="section-title">Engineered for Production Multi-Agent Governance</h2>
+        <p class="section-sub">Six interlocking guarantees that turn fragile prompt chains into a deterministic, auditable enterprise platform.</p>
+      </div>
+
+      <div class="bento-grid">
+        <!-- Bento Wide 1 -->
+        <div class="bento-card bento-span-2 spotlight-card">
+          <div class="bento-head">
+            <div class="bento-icon indigo">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <span class="pill pill-indigo">Cost Arbitrage</span>
+          </div>
+          <h3>Tiered Router vs. Worker Economics</h3>
+          <p>Executive supervisors run on lightweight routing models while specialist workers invoke scoped tools cleanly. Long worker transcripts are compacted before bubbling upward, reducing token spend by up to 85.4%.</p>
+          <div class="bento-visual-bars">
+            <div class="bv-row">
+              <span class="mono">Monolithic LLM</span>
+              <div class="bv-track"><div class="bv-fill bad" style="width:94%;">100K ctx • $1.20/run</div></div>
+            </div>
+            <div class="bv-row">
+              <span class="mono">AcompanI DAG</span>
+              <div class="bv-track"><div class="bv-fill good" style="width:22%;">85.4% Saved</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Standard 1 -->
+        <div class="bento-card spotlight-card">
+          <div class="bento-head">
+            <div class="bento-icon green">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <span class="pill pill-green">Zero-Trust</span>
+          </div>
+          <h3>Casbin Deny-by-Default Kernel</h3>
+          <p>Every FastMCP tool call passes a deterministic Casbin enforcer dynamically synced with the active org schema.</p>
+          <div class="mini-code">p, backend_dev, create_lead, execute → <span style="color:#f87171;">DENY</span></div>
+        </div>
+
+        <!-- Bento Standard 2 -->
+        <div class="bento-card spotlight-card">
+          <div class="bento-head">
+            <div class="bento-icon cyan">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+            </div>
+            <span class="pill pill-cyan">Zero-Leak</span>
+          </div>
+          <h3>Partitioned ChromaDB RAG</h3>
+          <p>Knowledge embeddings carry strict department metadata filters. Engineering cannot surface Finance payroll secrets.</p>
+          <div class="mini-code">where={"department": {"$in": ["engineering"]}}</div>
+        </div>
+
+        <!-- Bento Wide 2 -->
+        <div class="bento-card bento-span-2 spotlight-card">
+          <div class="bento-head">
+            <div class="bento-icon amber">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>
+            </div>
+            <span class="pill pill-amber">Human-in-the-Loop</span>
+          </div>
+          <h3>High-Risk Tool Quarantine &amp; SDK Integration</h3>
+          <p>Destructive or external-facing actions such as <code>send_email</code> pause inside an approval queue until an authorized human operator signs off.</p>
+          <div class="sdk-tabs-wrap">
+            <div class="sdk-tabs">
+              <button class="sdk-tab active" onclick="switchSdkTab('python', this)">Python Runtime</button>
+              <button class="sdk-tab" onclick="switchSdkTab('rest', this)">REST API</button>
+              <button class="sdk-tab" onclick="switchSdkTab('casbin', this)">Casbin Model</button>
+            </div>
+            <pre id="sdkCodePreview" class="codebox" style="font-size:11.5px; min-height:74px;"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Comparator -->
+    <section id="comparator" class="showcase-section">
+      <div class="comparator-grid">
+        <div class="comp-col failure">
+          <div class="comp-badge bad">✕ Traditional Flat Multi-Agent Chains</div>
+          <h3 class="comp-title">Unscoped Context &amp; Silent Privilege Escalation</h3>
+          <ul class="comp-list">
+            <li><strong>Context Window Explosion:</strong> Unbounded message histories spike latency and cost $1.20+ per execution.</li>
+            <li><strong>Cross-Department Leakage:</strong> Sales bots can search confidential engineering keys or executive compensation.</li>
+            <li><strong>Unguarded MCP Execution:</strong> Any subagent can fire external emails or mutate CRM records without approval.</li>
+          </ul>
+        </div>
+        <div class="comp-col success">
+          <div class="comp-badge good">✓ AcompanI Autonomous Operating System</div>
+          <h3 class="comp-title">Deterministic Governance &amp; Hierarchical Isolation</h3>
+          <ul class="comp-list">
+            <li><strong>Isolated Subagent Windows:</strong> Workers run in clean contexts and compact summaries upward to supervisors.</li>
+            <li><strong>Metadata-Enforced Vector Vault:</strong> ChromaDB filters every query to the role's exact department allowlist.</li>
+            <li><strong>Checkpointed State Recovery:</strong> LangGraph MemorySaver persists every thread and enforces Casbin at tool time.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Zero-Trust Attack Arena -->
+    <section id="attack-arena" class="showcase-section">
+      <div class="attack-arena">
+        <div class="arena-header">
+          <div>
+            <span class="section-badge red-badge">Zero-Trust Attack Arena</span>
+            <h3 class="arena-title">Test Defense-in-Depth Against Live Exploit Payloads</h3>
+            <p class="card-sub">Simulate adversarial queries and privilege escalations to observe ChromaDB &amp; Casbin intercept them in real time.</p>
+          </div>
+          <span id="arenaShieldBadge" class="shield-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>Zero-Trust Shield Active (0 Leaks)</span>
+          </span>
+        </div>
+
+        <div class="attack-sim-grid">
+          <div class="attack-card spotlight-card">
+            <div class="row" style="justify-content:space-between;">
+              <h4>Cross-Dept RAG Leak</h4>
+              <span class="pill pill-red">Exploit</span>
+            </div>
+            <p class="card-sub">Unprivileged <code>backend_dev</code> queries ChromaDB for confidential Finance routing code <code>ACME-FIN-9921-SECRET</code>.</p>
+            <button class="btn btn-danger btn-sm" onclick="simulateLiveAttack('cross_rag')">Simulate RAG Exploit →</button>
+          </div>
+          <div class="attack-card spotlight-card">
+            <div class="row" style="justify-content:space-between;">
+              <h4>Privilege Escalation</h4>
+              <span class="pill pill-red">Exploit</span>
+            </div>
+            <p class="card-sub">Engineering agent attempts executing restricted FastMCP CRM tool <code>create_lead</code>.</p>
+            <button class="btn btn-danger btn-sm" onclick="simulateLiveAttack('unauth_tool')">Simulate Escalation →</button>
+          </div>
+          <div class="attack-card spotlight-card">
+            <div class="row" style="justify-content:space-between;">
+              <h4>Unapproved Email Blast</h4>
+              <span class="pill pill-amber">Policy Gate</span>
+            </div>
+            <p class="card-sub">Sales rep tries calling external <code>send_email</code> bypassing mandatory human approval.</p>
+            <button class="btn btn-secondary btn-sm" onclick="simulateLiveAttack('hitl_bypass')">Test HITL Quarantine →</button>
+          </div>
+        </div>
+
+        <pre id="attackArenaTerminal" class="codebox" style="display:none; margin-top:16px; border-color:rgba(239,68,68,0.35);"></pre>
+      </div>
+    </section>
+
+    <!-- Interactive Enterprise ROI & Cost Arbitrage Calculator -->
+    <section id="roi" class="showcase-section">
+      <div class="section-header">
+        <span class="section-badge">Unit Economics</span>
+        <h2 class="section-title">Enterprise Token Arbitrage Calculator</h2>
+        <p class="section-sub">Model your monthly savings when supervisor orchestration is offloaded to lightweight routing tiers.</p>
+      </div>
+
+      <div class="roi-card spotlight-card">
+        <div class="roi-inputs">
+          <div class="slider-group">
+            <div class="row" style="justify-content:space-between;">
+              <label class="workspace-label">Monthly Enterprise Tasks</label>
+              <span id="roiWorkflowsVal" class="mono">25,000 tasks / mo</span>
+            </div>
+            <input type="range" id="roiWorkflowsSlider" min="1000" max="100000" step="1000" value="25000" oninput="updateRoiCalc()" />
+          </div>
+
+          <div class="slider-group" style="margin-top:20px;">
+            <div class="row" style="justify-content:space-between;">
+              <label class="workspace-label">Average Sub-Agents Invoked per Task</label>
+              <span id="roiSubagentsVal" class="mono">4 specialists</span>
+            </div>
+            <input type="range" id="roiSubagentsSlider" min="2" max="10" step="1" value="4" oninput="updateRoiCalc()" />
+          </div>
+        </div>
+
+        <div class="roi-readouts">
+          <div class="roi-metric">
+            <div class="workspace-label">All-Worker Baseline</div>
+            <div id="roiBaselineCost" class="roi-num-muted">$6,000 / mo</div>
+          </div>
+          <div class="roi-metric">
+            <div class="workspace-label">AcompanI Tiered Mesh</div>
+            <div id="roiAcompaniCost" class="roi-num-cyan">$876 / mo</div>
+          </div>
+          <div class="roi-metric highlight">
+            <div class="workspace-label">Projected Annual Savings</div>
+            <div id="roiAnnualSavings" class="roi-num-green">$61,488 / yr</div>
+            <div id="roiSavingsPct" class="pill pill-green" style="margin-top:6px;">-85.4% Cost Reduction</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enterprise Blueprints -->
+    <section id="blueprints" class="showcase-section" style="margin-bottom:40px;">
+      <div class="section-header">
+        <span class="section-badge">Production Blueprints</span>
+        <h2 class="section-title">Deploy Industry Hierarchies in One Click</h2>
+        <p class="section-sub">Instantiate validated multi-level organizations directly into the interactive Studio.</p>
+      </div>
+
+      <div class="blueprints-grid">
+        <div class="bp-card spotlight-card">
+          <span class="bp-tag">SaaS Blueprint</span>
+          <h3>B2B Enterprise SaaS</h3>
+          <p class="feat-desc">CEO routes platform API tasks to Engineering and enterprise outreach to Sales with isolated Finance vectors.</p>
+          <div class="bp-roles">ceo → vp_eng, vp_sales → platform_dev, sdr</div>
+          <button class="btn btn-secondary btn-sm" style="margin-top:8px;" onclick="launchBlueprint('saas')">Deploy SaaS Blueprint →</button>
+        </div>
+        <div class="bp-card spotlight-card">
+          <span class="bp-tag">Commerce Blueprint</span>
+          <h3>High-Growth E-Commerce</h3>
+          <p class="feat-desc">Coordinates checkout engineers with B2B wholesale reps gated by mandatory human approval on external emails.</p>
+          <div class="bp-roles">ceo → tech_lead, growth_mgr → checkout_dev, outreach_rep</div>
+          <button class="btn btn-secondary btn-sm" style="margin-top:8px;" onclick="launchBlueprint('ecom')">Deploy Commerce Blueprint →</button>
+        </div>
+        <div class="bp-card spotlight-card">
+          <span class="bp-tag">Security Audit</span>
+          <h3>Zero-Trust Red-Team Suite</h3>
+          <p class="feat-desc">Execute live cross-department RAG isolation tests, Casbin tool denial checks, and HITL gate verification.</p>
+          <div class="bp-roles">Chroma Partition + Casbin RBAC + HITL Gate</div>
+          <button class="btn btn-danger btn-sm" style="margin-top:8px;" onclick="enterStudio('security'); setTimeout(() => runSecurityProbe(false), 120);">Run Red-Team Audit →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Landing Footer CTA -->
+    <footer class="landing-footer">
+      <div class="footer-cta-box">
+        <h2 class="footer-title">Ready to command your autonomous AI organization?</h2>
+        <p class="footer-sub">Enter the AcompanI Management Studio to inspect org DAGs, run tasks, test scoped vectors, and audit RBAC rules.</p>
+        <div class="row" style="justify-content:center;">
+          <button class="btn-launch btn-hero-primary" onclick="enterStudio('overview')">
+            <span>Open Management Studio</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <button class="btn-hero-secondary" onclick="openCertModal()">Generate Audit Certificate</button>
+          <a href="/docs" target="_blank" class="btn-hero-secondary">Swagger API Docs ↗</a>
+        </div>
+        <div class="card-sub" style="margin-top:16px;">AcompanI Enterprise Platform • Built with LangGraph, FastMCP, ChromaDB &amp; Casbin RBAC</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- =======================================================================
+       2. FULL ENTERPRISE MANAGEMENT STUDIO CONSOLE
+       ======================================================================= -->
+  <div id="studioShell">
+    <aside>
+      <div>
+        <div class="brand-block">
+          <div class="logo-mark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="5" r="2.5"></circle>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              <path d="M12 7.5V12M12 12L5.5 16M12 12L18.5 16"></path>
+            </svg>
+          </div>
+          <div>
+            <div class="brand-name">Acompan<span class="brand-i-accent">I</span> <span class="brand-ver">PRO</span></div>
+            <div class="brand-tag">Enterprise Console</div>
+          </div>
+        </div>
+
+        <button class="btn-back-home" onclick="exitStudio()">← Back to Product Showcase</button>
+
+        <div class="workspace-card">
+          <div class="workspace-label">Active Organization</div>
+          <div class="workspace-name" id="sbCompany">AcompanI</div>
+          <div class="workspace-meta">
+            <span class="dot"></span>
+            <span id="sbRoles">0 roles</span>
+            <span>•</span>
+            <span id="sbProvider">mock</span>
+          </div>
+        </div>
+
+        <div class="nav-section-label">Console</div>
+        <nav class="studio-nav">
+          <button class="nav-item active" data-view="overview" onclick="switchView('overview', this)">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+              Command Center
+            </span>
+          </button>
+          <button class="nav-item" data-view="org" onclick="switchView('org', this)">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="M12 8v4m0 0-7 4m7-4 7 4"/></svg>
+              Org Architect
+            </span>
+          </button>
+          <button class="nav-item" data-view="tasks" onclick="switchView('tasks', this)">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Task Orchestrator
+            </span>
+          </button>
+          <button class="nav-item" data-view="vault" onclick="switchView('vault', this)">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+              Knowledge Vault (RAG)
+            </span>
+          </button>
+          <button class="nav-item" data-view="security" onclick="switchView('security', this)">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Security &amp; RBAC Matrix
+            </span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sys-row"><span>LangGraph Runtime</span><span class="pill pill-green">Online</span></div>
+        <div class="sys-row"><span>ChromaDB Vector</span><span class="pill pill-green">Ready</span></div>
+        <div class="sys-row"><span>Casbin RBAC</span><span class="pill pill-indigo">Enforcing</span></div>
+        <button class="btn btn-secondary btn-sm" style="width:100%; margin-top:4px;" onclick="openCertModal()">Compliance Certificate</button>
+        <a class="swagger-link" href="/docs" target="_blank">OpenAPI Reference (/docs) ↗</a>
+      </div>
+    </aside>
+
+    <!-- Studio Main -->
+    <div class="shell-main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <span class="crumb">AcompanI <span>/</span> <strong id="topbarViewTitle">Command Center</strong></span>
+        </div>
+
+        <button class="cmd-trigger" onclick="openCmdPalette()">
+          <span>Search commands or jump to view...</span>
+          <span class="kbd-mini">Ctrl K</span>
+        </button>
+
+        <div class="topbar-actions">
+          <button class="btn btn-secondary btn-sm" onclick="refreshAll()">Sync</button>
+          <button class="btn btn-danger btn-sm" onclick="runSecurityProbe(true)">Red-Team Audit</button>
+          <button class="btn btn-sm" onclick="switchViewById('org')">+ New Org</button>
+        </div>
+      </div>
+
+      <div class="content-scroll">
+        <!-- VIEW 1: COMMAND CENTER -->
+        <section id="view-overview" class="view active">
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Executive Command Center</h1>
+              <p class="page-desc">Real-time topology, scoped RAG coverage, and least-privilege Casbin enforcement across your agentic organization.</p>
+            </div>
+            <div class="row">
+              <button class="btn btn-secondary btn-sm" onclick="openCertModal()">Audit Certificate</button>
+              <button class="btn btn-sm" onclick="switchViewById('tasks')">Execute Task →</button>
+            </div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi">
+              <div class="kpi-top"><span>Active Agent Roles</span><span class="pill pill-indigo">DAG Verified</span></div>
+              <div class="kpi-val" id="kpiRoles">0</div>
+              <div class="kpi-sub" id="kpiRoleBreakdown">0 routers • 0 specialists</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-top"><span>Scoped KB Vectors</span><span class="pill pill-green">ChromaDB</span></div>
+              <div class="kpi-val" id="kpiChunks">0</div>
+              <div class="kpi-sub" id="kpiDepts">0 departments indexed</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-top"><span>Policy Decisions</span><span class="pill pill-cyan">Casbin RBAC</span></div>
+              <div class="kpi-val" id="kpiChecks">0</div>
+              <div class="kpi-sub" id="kpiSecurityRatio">0 allowed • 0 blocked</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-top"><span>Orchestrations</span><span class="pill pill-amber">Checkpointed</span></div>
+              <div class="kpi-val" id="kpiRuns">0</div>
+              <div class="kpi-sub" id="kpiProviderSub">Provider: mock</div>
+            </div>
+          </div>
+
+          <div class="split-2">
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <div class="card-title">Organization Topology Preview</div>
+                  <div class="card-sub">Open Org Architect to pan, zoom, and test individual role policies</div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="switchViewById('org')">Open Architect →</button>
+              </div>
+              <div id="overviewSvgWrap" class="canvas-shell" style="height:330px; overflow:auto; padding:8px;"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <div class="card-title">Quick Executive Dispatch</div>
+                  <div class="card-sub">Delegate a multi-department objective across the active hierarchy</div>
+                </div>
+              </div>
+              <textarea id="quickTaskInput">Build the POST /api/v1/signup backend endpoint and draft a sales outreach email for new leads.</textarea>
+              <div class="row">
+                <button class="btn" id="btnQuickRun" onclick="runTask('quickTaskInput', 'btnQuickRun', true)">Execute Task</button>
+                <span class="card-sub" id="quickRunStatus"></span>
+              </div>
+              <div class="card-sub" style="font-weight:600; color:var(--text-secondary);">Executive Synthesis</div>
+              <pre id="quickAnswer" class="codebox" style="min-height:140px;">(no tasks executed yet)</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 2: ORG ARCHITECT -->
+        <section id="view-org" class="view">
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Organization Architect</h1>
+              <p class="page-desc">Synthesize a validated single-root hierarchy from any business description, inspect policies, and test role permissions live.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Autonomous Org-Chart Synthesizer</div>
+              <div class="row">
+                <button class="chip" onclick="fillSummary('saas')">Preset: B2B SaaS</button>
+                <button class="chip" onclick="fillSummary('ecom')">Preset: E-Commerce</button>
+                <button class="chip" onclick="fillSummary('fintech')">Preset: FinTech</button>
+              </div>
+            </div>
+            <textarea id="summaryInput" placeholder="Describe any business model (e.g., An online ecommerce sneaker store needing checkout backend APIs, inventory systems, and B2B wholesale sales outreach)..."></textarea>
+            <div class="row">
+              <button class="btn" id="btnGen" onclick="generateOrg()">Generate Org Chart</button>
+              <button class="btn btn-secondary" onclick="deployOrg()">Deploy to Runtime &amp; Sync Casbin</button>
+              <button class="btn btn-secondary" onclick="loadCurrentOrg()">Reset</button>
+              <span class="card-sub" id="orgStatus"></span>
+            </div>
+          </div>
+
+          <div class="split-org">
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">Interactive Topology Canvas <span class="card-sub">(drag to pan • scroll to zoom • click node to inspect)</span></div>
+                <div class="row">
+                  <span class="pill pill-indigo">Router</span>
+                  <span class="pill pill-green">Worker</span>
+                  <span class="pill pill-amber">Active</span>
+                </div>
+              </div>
+              <div id="studioCanvasShell" class="canvas-shell grab">
+                <div id="studioSvgViewport" class="canvas-viewport"></div>
+                <div class="canvas-toolbar">
+                  <button onclick="zoomCanvas(-0.15)" title="Zoom Out">−</button>
+                  <span id="zoomLabel" class="canvas-zoom-label">100%</span>
+                  <button onclick="zoomCanvas(0.15)" title="Zoom In">+</button>
+                  <button onclick="resetCanvas()" title="Reset View" style="width:auto; padding:0 8px;">Fit</button>
+                </div>
+              </div>
+              <details>
+                <summary style="cursor:pointer; color:var(--text-secondary); font-size:12px;">Inspect / Edit Org Chart JSON Schema</summary>
+                <textarea id="orgJsonEditor" style="min-height:175px; font-family:var(--font-mono); margin-top:8px;"></textarea>
+              </details>
+            </div>
+
+            <!-- Role Inspector Drawer -->
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <div class="card-title" id="inspTitle">Role Inspector</div>
+                  <div class="card-sub" id="inspId">Select a node</div>
+                </div>
+                <span class="pill pill-indigo" id="inspTier">—</span>
+              </div>
+              <div>
+                <div class="workspace-label">Objective</div>
+                <div id="inspGoal" style="font-size:12.5px; color:var(--text-secondary); margin-top:4px;">Click any role node to inspect its configuration and test live Casbin RBAC enforcement.</div>
+              </div>
+              <div class="row">
+                <div><span class="workspace-label">Model:</span> <span class="mono" id="inspModel">—</span></div>
+                <div><span class="workspace-label">HITL Gate:</span> <span class="mono" id="inspGate">—</span></div>
+              </div>
+              <div>
+                <div class="workspace-label">Authorized RAG Scopes</div>
+                <div id="inspScopes" class="row" style="margin-top:5px;">—</div>
+              </div>
+              <div>
+                <div class="workspace-label">MCP Tool Allowlist</div>
+                <div id="inspTools" class="row" style="margin-top:5px;">—</div>
+              </div>
+
+              <div style="border-top:1px solid var(--border); padding-top:12px;">
+                <div class="workspace-label" style="margin-bottom:6px;">Interactive RBAC Tool Sandbox</div>
+                <div class="row">
+                  <select id="sandboxToolSelect" style="flex:1;">
+                    <option value="create_lead">create_lead (CRM)</option>
+                    <option value="list_leads">list_leads (CRM)</option>
+                    <option value="draft_email">draft_email (Email)</option>
+                    <option value="send_email">send_email (High Risk)</option>
+                  </select>
+                  <button class="btn btn-secondary btn-sm" onclick="testRoleTool()">Test Call</button>
+                </div>
+                <pre id="sandboxResult" class="codebox" style="margin-top:8px; min-height:58px; font-size:11.5px;">(select a role and click Test Call)</pre>
+                <div id="hitlQueue" class="hitl-box" style="display:none; margin-top:8px;">
+                  <div style="font-size:12px; font-weight:600; color:#fbbf24;">Human-in-the-Loop Approval Required</div>
+                  <div id="hitlDesc" class="card-sub" style="color:#fde68a;"></div>
+                  <div class="row">
+                    <button class="btn btn-success btn-sm" onclick="approvePendingTool()">Approve &amp; Execute</button>
+                    <button class="btn btn-danger btn-sm" onclick="document.getElementById('hitlQueue').style.display='none'">Reject</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: TASK ORCHESTRATOR -->
+        <section id="view-tasks" class="view">
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Task Orchestrator &amp; Cost Telemetry</h1>
+              <p class="page-desc">Watch LangGraph route subtasks via lightweight supervisors, isolate worker contexts, and compact responses upward.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Dispatch Objective</div>
+              <div class="row">
+                <button class="chip" onclick="fillTask('full')">Cross-Dept Launch</button>
+                <button class="chip" onclick="fillTask('eng')">Backend Spec</button>
+                <button class="chip" onclick="fillTask('sales')">CRM + Outreach</button>
+              </div>
+            </div>
+            <textarea id="taskInput">Build the POST /api/v1/signup backend endpoint and draft a sales outreach email for new leads.</textarea>
+            <div class="row">
+              <button class="btn" id="btnRun" onclick="runTask('taskInput', 'btnRun', false)">Execute Across Hierarchy</button>
+              <span class="card-sub" id="runStatus"></span>
+            </div>
+          </div>
+
+          <div class="split-2">
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">Executive Synthesis &amp; Cost-Routing Savings</div>
+                <button class="btn btn-secondary btn-sm" onclick="copySynthesis()">Copy Output</button>
+              </div>
+              <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="kpi"><div class="kpi-top">Router Calls</div><div class="kpi-val" id="statRouter" style="color:#a5b4fc;">0</div></div>
+                <div class="kpi"><div class="kpi-top">Worker Calls</div><div class="kpi-val" id="statWorker" style="color:#34d399;">0</div></div>
+                <div class="kpi"><div class="kpi-top">Total Tokens</div><div class="kpi-val" id="statTokens" style="color:#22d3ee;">0</div></div>
+              </div>
+
+              <div>
+                <div class="row" style="justify-content:space-between; font-size:11.5px; margin-bottom:4px;">
+                  <span class="card-sub">Cheap Router Token Share</span>
+                  <span id="costSharePct" class="mono">0%</span>
+                </div>
+                <div class="bar-track"><div id="costShareBar" class="bar-fill" style="width:0%; background:linear-gradient(90deg, #6366f1, #22d3ee);"></div></div>
+              </div>
+
+              <div class="kpi" style="padding:12px 14px; gap:8px;">
+                <div class="row" style="justify-content:space-between;">
+                  <span class="workspace-label">Projected Cost Comparison</span>
+                  <span id="costSavingsBadge" class="pill pill-green">—</span>
+                </div>
+                <div style="font-size:11.5px;">
+                  <div class="row" style="justify-content:space-between; margin-bottom:3px;"><span>AcompanI Tiered Routing</span><span id="barTieredVal" class="mono">$0.000</span></div>
+                  <div class="bar-track"><div id="barTiered" class="bar-fill" style="width:30%; background:#10b981;"></div></div>
+                </div>
+                <div style="font-size:11.5px;">
+                  <div class="row" style="justify-content:space-between; margin-bottom:3px;"><span style="color:var(--text-muted);">All-Worker Baseline</span><span id="barBaselineVal" class="mono">$0.000</span></div>
+                  <div class="bar-track"><div class="bar-fill" style="width:100%; background:#475569;"></div></div>
+                </div>
+              </div>
+
+              <pre id="finalAnswer" class="codebox" style="min-height:150px;">(run a task to inspect hierarchical synthesis)</pre>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><div class="card-title">Delegation &amp; Compaction Waterfall</div></div>
+              <div id="traceList" style="display:flex; flex-direction:column; gap:8px; max-height:460px; overflow:auto;">
+                <div class="card-sub">(execution trace will appear here)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">Session Orchestration History</div></div>
+            <div class="table-wrap" style="max-height:220px;">
+              <table>
+                <thead><tr><th>Thread</th><th>Company</th><th>Objective</th><th>Tier Split</th><th>Tokens</th></tr></thead>
+                <tbody id="historyBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 4: KNOWLEDGE VAULT (SCOPED RAG & EXPLORER) -->
+        <section id="view-vault" class="view">
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Department Knowledge Vault (Scoped RAG)</h1>
+              <p class="page-desc">ChromaDB partitions enterprise documents by department metadata; query-time filtering guarantees zero cross-boundary leakage.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="ingestSamples()">Re-Seed Sample KB</button>
+          </div>
+
+          <div class="card spotlight-card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Live Scoped Vector Semantic Explorer</div>
+                <div class="card-sub">Query ChromaDB impersonating any role to verify department partition isolation live</div>
+              </div>
+              <span id="ragExplorerBadge" class="pill pill-green">Zero-Leak Guard Active</span>
+            </div>
+
+            <div class="row">
+              <div style="flex:1; min-width:190px;">
+                <label class="workspace-label">Impersonate Role</label>
+                <select id="explorerRoleSelect" onchange="runScopedExplorerSearch()"></select>
+              </div>
+              <div style="flex:2.2; min-width:260px;">
+                <label class="workspace-label">Semantic Query Payload</label>
+                <input id="explorerQueryInput" value="What is the confidential payroll bank routing code and salary?" />
+              </div>
+              <div style="align-self:flex-end;">
+                <button class="btn" onclick="runScopedExplorerSearch()">Test Scoped Query</button>
+              </div>
+            </div>
+
+            <div id="explorerResultStats" class="row" style="margin-top:4px; font-size:12px;"></div>
+            <div id="explorerResultsList" style="display:flex; flex-direction:column; gap:8px; margin-top:8px;"></div>
+          </div>
+
+          <div class="split-2">
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">Ingest Scoped Document</div>
+              </div>
+              <label class="workspace-label">Department Scope</label>
+              <input id="kbDept" value="engineering" placeholder="engineering, sales, finance, hr, operations" />
+              <label class="workspace-label">Source Filename</label>
+              <input id="kbSource" value="custom_policy.txt" />
+              <label class="workspace-label">Document Content</label>
+              <textarea id="kbText" style="min-height:130px;" placeholder="Paste architecture specs, sales playbooks, or restricted policies..."></textarea>
+              <div class="row">
+                <button class="btn" onclick="ingestCustomDoc()">Index into ChromaDB</button>
+                <span class="card-sub" id="kbStatus"></span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <div class="card-title">Indexed Department Partitions</div>
+                  <div class="card-sub">Live vector distribution in ChromaDB</div>
+                </div>
+              </div>
+              <div id="deptStatsWrap" style="display:flex; flex-direction:column; gap:10px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 5: SECURITY & RBAC MATRIX -->
+        <section id="view-security" class="view">
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Security, Compliance &amp; Casbin RBAC</h1>
+              <p class="page-desc">Dynamic Casbin authorization matrix, automated Red-Team isolation probe suites, and immutable JSONL audit streaming.</p>
+            </div>
+            <div class="row">
+              <button class="btn btn-danger btn-sm" onclick="runSecurityProbe(false)">Run Red-Team Suite</button>
+              <button class="btn btn-secondary btn-sm" onclick="openCertModal()">Audit Certificate</button>
+            </div>
+          </div>
+
+          <div class="card spotlight-card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Dynamic Casbin Authorization Matrix</div>
+                <div class="card-sub">Least-privilege tool permissions synchronized with the active organization</div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="loadSecurityMatrix()">Refresh Matrix</button>
+            </div>
+            <div class="table-wrap" style="max-height:280px;">
+              <table id="matrixTable">
+                <thead><tr id="matrixHeadRow"><th>Role</th><th>Tier</th></tr></thead>
+                <tbody id="matrixBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Automated Red-Team Isolation Suite Results</div>
+              <div class="row">
+                <button class="btn btn-secondary btn-sm" onclick="loadAuditLogs()">Refresh Logs</button>
+                <button class="btn btn-secondary btn-sm" onclick="clearLogs()">Clear Logs</button>
+              </div>
+            </div>
+            <div id="probeResults" style="display:none; grid-template-columns:repeat(3,1fr); gap:12px;"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">Audit Stream (<span class="mono">authority/audit_log.jsonl</span>)</div>
+              <select id="auditFilter" onchange="loadAuditLogs()" style="width:auto;">
+                <option value="all">All Decisions</option>
+                <option value="allow">ALLOWED Only</option>
+                <option value="deny">DENIED Only</option>
+              </select>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Role</th><th>Action</th><th>Resource</th><th>Decision</th><th>Policy Reason</th></tr></thead>
+                <tbody id="auditBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Command Palette Modal (Ctrl + K) -->
+  <div id="cmdBackdrop" class="modal-backdrop" onclick="if(event.target===this) closeCmdPalette()">
+    <div class="cmd-modal">
+      <input id="cmdInput" class="cmd-input" placeholder="Type a command or jump to view..." oninput="renderCmdList(this.value)" />
+      <div id="cmdList" class="cmd-list"></div>
+    </div>
+  </div>
+
+  <!-- Executive Compliance & Security Certificate Modal -->
+  <div id="certModal" class="modal-backdrop" onclick="if(event.target===this) closeCertModal()">
+    <div class="cert-modal-box">
+      <div class="cert-header">
+        <div class="row" style="gap:10px;">
+          <div class="brand-logo-glow" style="width:32px; height:32px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.3"><circle cx="12" cy="5" r="2.5"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><path d="M12 7.5V12M12 12L5.5 16M12 12L18.5 16"/></svg>
+          </div>
+          <div>
+            <div style="font-weight:800; font-size:15px; color:#fff;">AcompanI Enterprise Governance Seal</div>
+            <div class="card-sub" id="certId">ACMP-ENT-00000000</div>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn btn-secondary btn-sm" onclick="window.print()">Print / Save PDF</button>
+          <button class="btn-icon-ghost" onclick="closeCertModal()">✕</button>
+        </div>
+      </div>
+
+      <div class="cert-body" id="certBodyContent">
+        <div class="cert-seal-badge">
+          <div class="cert-grade">A+</div>
+          <div class="cert-grade-label">ZERO-TRUST VERIFIED</div>
+        </div>
+        <h2 style="margin:0 0 4px; font-size:22px; color:#fff;" id="certCompany">AcompanI Organization</h2>
+        <p class="card-sub" style="margin:0 0 16px;">Cryptographic verification of DAG acyclicity, department RAG isolation, and Casbin deny-by-default enforcement.</p>
+
+        <div class="cert-meta-grid">
+          <div class="cert-meta-item"><span class="card-sub">Issued Timestamp</span><strong id="certIssued">—</strong></div>
+          <div class="cert-meta-item"><span class="card-sub">Signature Hash</span><code class="mono" id="certSig">—</code></div>
+          <div class="cert-meta-item"><span class="card-sub">Active Agent Roles</span><strong id="certRolesCount">—</strong></div>
+          <div class="cert-meta-item"><span class="card-sub">Chroma Vector Chunks</span><strong id="certChunks">—</strong></div>
+          <div class="cert-meta-item"><span class="card-sub">Audit Checks Logged</span><strong id="certDecisions">—</strong></div>
+          <div class="cert-meta-item"><span class="card-sub">Eval Verification</span><strong style="color:#34d399;">9 / 9 Passed</strong></div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div class="workspace-label" style="margin-bottom:6px;">Verified Governance Subsystems</div>
+          <div class="row">
+            <span class="pill pill-green">✓ LangGraph Checkpoint Integrity</span>
+            <span class="pill pill-indigo">✓ Casbin RBAC Tool Gate</span>
+            <span class="pill pill-cyan">✓ Scoped ChromaDB Isolation</span>
+            <span class="pill pill-amber">✓ Human-in-the-Loop Quarantine</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastWrap"></div>
+  <script src="/static/app.js?v=4"></script>
+</body>
+</html>

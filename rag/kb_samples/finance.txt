@@ -1,0 +1,6 @@
+Confidential Finance & Payroll Policy (RESTRICTED):
+- Q4 Operating Runway: $1,420,000 cash reserve; monthly burn rate is $118,000.
+- Executive compensation: CEO base $195,000; VP salaries range $150,000-$170,000.
+- Vendor spend limit: Any software contract above $5,000 requires CFO and CEO co-signature.
+- Bank account routing code: ACME-FIN-9921-SECRET (restricted to finance and executive roles).
+

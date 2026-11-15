@@ -1,0 +1,62 @@
+company_name: "Acme Tech Startup"
+roles:
+  - id: ceo
+    title: Chief Executive Officer
+    goal: Decompose incoming company objectives into department-level subtasks and synthesize final executive output
+    reports_to: null
+    tools: []
+    llm: qwen2.5:1.5b
+    human_approval_required: false
+    permissions:
+      can_delegate: true
+      can_spend: true
+      data_scopes: ["engineering", "sales", "finance"]
+
+  - id: eng_manager
+    title: Engineering Manager
+    goal: Oversee technical architecture, backend APIs, and engineering deliverables
+    reports_to: ceo
+    tools: []
+    llm: qwen2.5:1.5b
+    human_approval_required: false
+    permissions:
+      can_delegate: true
+      can_spend: false
+      data_scopes: ["engineering"]
+
+  - id: sales_manager
+    title: Sales Manager
+    goal: Coordinate lead generation, CRM updates, and customer outreach
+    reports_to: ceo
+    tools: ["create_lead", "update_lead_status", "list_leads", "draft_email"]
+    llm: qwen2.5:1.5b
+    human_approval_required: false
+    permissions:
+      can_delegate: true
+      can_spend: false
+      data_scopes: ["sales"]
+
+  - id: backend_dev
+    title: Backend Developer
+    goal: Implement concrete backend services, endpoints, and technical documentation using engineering knowledge
+    reports_to: eng_manager
+    tools: []
+    llm: qwen2.5:3b
+    human_approval_required: false
+    permissions:
+      can_delegate: false
+      can_spend: false
+      data_scopes: ["engineering"]
+
+  - id: sales_rep
+    title: Sales Representative
+    goal: Execute customer outreach, create new leads in CRM, and draft sales emails
+    reports_to: sales_manager
+    tools: ["create_lead", "list_leads", "draft_email"]
+    llm: qwen2.5:3b
+    human_approval_required: true
+    permissions:
+      can_delegate: false
+      can_spend: false
+      data_scopes: ["sales"]
+

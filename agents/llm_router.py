@@ -114,11 +114,18 @@ def get_llm(model_name: str | None = None, role_type: str = "worker") -> Any:
     elif provider == "openai_compatible":
         from langchain_openai import ChatOpenAI
 
+        headers = {
+            "HTTP-Referer": "https://github.com/MattMehta10/AcompanI",
+            "X-Title": "AcompanI Platform",
+        }
         llm = ChatOpenAI(
             model=model_name,
             api_key=os.getenv("OPENAI_API_KEY"),
             base_url=os.getenv("OPENAI_BASE_URL", "https://api.groq.com/openai/v1"),
+            default_headers=headers,
             temperature=0.2,
+            timeout=30,
+            max_retries=2,
         )
     else:
         from langchain_ollama import ChatOllama

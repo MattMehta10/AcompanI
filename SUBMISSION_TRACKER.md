@@ -1,6 +1,7 @@
 # AcompanI — Submission Readiness Tracker
 
 > **Project:** AcompanI · Autonomous Hierarchical Multi-Agent Organization Platform  
+> **Repository:** [https://github.com/MattMehta10/AcompanI](https://github.com/MattMehta10/AcompanI)  
 > **Semester:** 7th Semester Minor Project  
 > **Audit Date:** November 15, 2026  
 > **Status:** 🟢 SUBMISSION READY

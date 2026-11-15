@@ -22,6 +22,8 @@
 | **Generated Active Org** | `generated_active.yaml` | ✅ Present |
 | **Audit Log** | `authority/audit_log.jsonl` | ✅ Present with records |
 | **Launch Script** | `run_acompani.ps1` | ✅ Opens browser + starts uvicorn |
+| **Real Cloud LLM Test** | OpenRouter (Llama 3.1 8B + 3.3 70B) | ✅ **VERIFIED** (6 calls, 3,208 tokens, 0 leaks) |
+| **GitHub Repository** | `MattMehta10/AcompanI` | ✅ **LIVE & SYNCED** |
 
 ---
 

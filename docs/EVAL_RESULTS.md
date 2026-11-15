@@ -331,3 +331,41 @@ Set-Location "MINOR PROJECT\ai-company"
 .\.venv\Scripts\python.exe -m pytest evals -v -s
 ```
 
+---
+
+## Live Cloud Inference Benchmark (OpenRouter / Llama 3)
+
+The system was evaluated end-to-end on real cloud LLMs via OpenRouter:
+- **Router Tier Model:** `meta-llama/llama-3.1-8b-instruct` (CEO & Managers)
+- **Worker Tier Model:** `meta-llama/llama-3.3-70b-instruct` (Leaf Workers)
+
+### Task Tested:
+> *"Design an enterprise onboarding API with JWT authentication and draft an outreach email to beta customers."*
+
+### Execution Metrics:
+| Metric | Real Cloud Value |
+|--------|------------------|
+| Total LLM Calls | 6 |
+| Router Tokens (Llama 3.1 8B) | 2,551 |
+| Worker Tokens (Llama 3.3 70B) | 657 |
+| Total Tokens Processed | 3,208 |
+| Context Compaction Ratio | 3.88 : 1 |
+| Data Scope Leaks Detected | 0 (100% scoped context adherence) |
+
+### Real Executive Synthesized Deliverable:
+```markdown
+**Final Executive Deliverable: Enterprise Onboarding API with JWT Authentication**
+
+**API Design Summary:**
+* A POST /api/v1/onboard endpoint implemented using FastAPI v0.115+, leveraging Pydantic v2 schemas.
+* JWT authentication integrated using user_id returned during signup.
+* Rate limiting standard of 60 requests/minute per IP with Redis middleware.
+
+**Outreach Email Draft:**
+Subject: Exclusive Access to Our Enterprise Onboarding API
+Dear [Customer],
+We're excited to invite you to be among the first to experience our new enterprise onboarding API,
+designed to streamline your onboarding process and enhance user experience...
+```
+
+

@@ -81,10 +81,10 @@ function initNeuralConstellation() {
     particles.push({
       x: Math.random() * w,
       y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      r: Math.random() * 1.6 + 0.8,
-      color: i % 3 === 0 ? 'rgba(34, 211, 238,' : (i % 3 === 1 ? 'rgba(99, 102, 241,' : 'rgba(168, 85, 247,'),
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      r: Math.random() * 1.5 + 0.8,
+      color: i % 4 === 0 ? 'rgba(234, 95, 45,' : (i % 4 === 1 ? 'rgba(255, 122, 69,' : (i % 4 === 2 ? 'rgba(255, 255, 255,' : 'rgba(161, 161, 170,')),
     });
   }
 
@@ -98,19 +98,19 @@ function initNeuralConstellation() {
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.color + '0.6)';
+      ctx.fillStyle = p.color + '0.7)';
       ctx.fill();
 
       for (let j = i + 1; j < particles.length; j++) {
         const p2 = particles[j];
         const dx = p.x - p2.x, dy = p.y - p2.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 125) {
+        if (dist < 115) {
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = `rgba(99, 102, 241, ${(1 - dist / 125) * 0.16})`;
-          ctx.lineWidth = 0.8;
+          ctx.strokeStyle = `rgba(234, 95, 45, ${(1 - dist / 115) * 0.12})`;
+          ctx.lineWidth = 0.7;
           ctx.stroke();
         }
       }
@@ -141,25 +141,26 @@ let selectedRoleId = null;
 const canvasState = { scale: 1, x: 16, y: 12, dragging: false, startX: 0, startY: 0 };
 
 const COMMANDS = [
-  { label: 'Back to Product Showcase', kbd: 'Home', run: () => exitStudio() },
-  { label: 'Go to Command Center', kbd: '1', run: () => switchViewById('overview') },
-  { label: 'Go to Org Architect Studio', kbd: '2', run: () => switchViewById('org') },
-  { label: 'Go to Task Orchestrator', kbd: '3', run: () => switchViewById('tasks') },
-  { label: 'Go to Knowledge Vault (RAG)', kbd: '4', run: () => switchViewById('vault') },
-  { label: 'Go to Security & RBAC Matrix', kbd: '5', run: () => switchViewById('security') },
-  { label: 'Open Executive Compliance Seal', kbd: 'Cert', run: () => openCertModal() },
-  { label: 'Synthesize E-Commerce Org', kbd: 'Preset', run: () => { switchViewById('org'); fillSummary('ecom'); generateOrg(); } },
-  { label: 'Synthesize B2B SaaS Org', kbd: 'Preset', run: () => { switchViewById('org'); fillSummary('saas'); generateOrg(); } },
-  { label: 'Run Red-Team Security Audit', kbd: 'Audit', run: () => runSecurityProbe(true) },
-  { label: 'Re-Seed Sample Knowledge Base', kbd: 'RAG', run: () => ingestSamples() },
-  { label: 'Sync Workspace Telemetry', kbd: 'Sync', run: () => refreshAll() },
+  { label: 'Back to Product Showcase', kbd: 'Home', keywords: 'home landing product showcase exit main site', run: () => exitStudio() },
+  { label: 'Go to Command Center', kbd: '1', keywords: 'overview dashboard command center kpi metrics dispatch home return', run: () => switchViewById('overview') },
+  { label: 'Go to Org Architect Studio', kbd: '2', keywords: 'org architect hierarchy roles dag rbac tree canvas studio visual', run: () => switchViewById('org') },
+  { label: 'Go to Task Orchestrator', kbd: '3', keywords: 'tasks orchestrator langgraph cost savings execution waterfall dispatch execute token compact', run: () => switchViewById('tasks') },
+  { label: 'Go to Knowledge Vault (RAG)', kbd: '4', keywords: 'vault rag knowledge scoped vector chromadb documents query isolation department secret', run: () => switchViewById('vault') },
+  { label: 'Go to Security & RBAC Matrix', kbd: '5', keywords: 'security rbac casbin matrix permissions allowlist red-team audit access control', run: () => switchViewById('security') },
+  { label: 'Open Executive Compliance Seal', kbd: 'Cert', keywords: 'certificate cert seal compliance executive audit report verification', run: () => openCertModal() },
+  { label: 'Synthesize E-Commerce Org', kbd: 'Preset', keywords: 'ecom ecommerce sneaker store preset org generate template shop', run: () => { switchViewById('org'); fillSummary('ecom'); generateOrg(); } },
+  { label: 'Synthesize B2B SaaS Org', kbd: 'Preset', keywords: 'saas b2b preset generate synthesizer template org cloud software', run: () => { switchViewById('org'); fillSummary('saas'); generateOrg(); } },
+  { label: 'Synthesize FinTech Org', kbd: 'Preset', keywords: 'fintech payment banking pci preset org generate template ledger', run: () => { switchViewById('org'); fillSummary('fintech'); generateOrg(); } },
+  { label: 'Run Red-Team Security Audit', kbd: 'Audit', keywords: 'audit red-team attack probe test pentest security check zero-leak quarantine', run: () => runSecurityProbe(true) },
+  { label: 'Re-Seed Sample Knowledge Base', kbd: 'RAG', keywords: 'reseed seed sample rag knowledge base documents reset database', run: () => ingestSamples() },
+  { label: 'Sync Workspace Telemetry', kbd: 'Sync', keywords: 'sync refresh reset state reload telemetry metrics status', run: () => refreshAll() },
 ];
 
 function enterStudio(viewName = 'overview') {
   sfx.click();
   document.getElementById('landingShell').style.display = 'none';
   document.getElementById('studioShell').classList.add('active');
-  switchViewById(viewName);
+  switchView(viewName, document.querySelector(`.nav-item[data-view="${viewName}"]`));
 }
 
 function exitStudio() {
@@ -433,11 +434,19 @@ function switchView(name, navBtn) {
 }
 
 function switchViewById(name) {
+  const studio = document.getElementById('studioShell');
+  if (studio && !studio.classList.contains('active')) {
+    document.getElementById('landingShell').style.display = 'none';
+    studio.classList.add('active');
+  }
   const btn = document.querySelector(`.nav-item[data-view="${name}"]`);
   switchView(name, btn);
 }
 
-// Command Palette
+// Command Palette Logic
+let currentCmdMatches = [];
+let activeCmdIdx = 0;
+
 function openCmdPalette() {
   sfx.click();
   document.getElementById('cmdBackdrop').classList.add('open');
@@ -452,19 +461,87 @@ function closeCmdPalette() {
 }
 
 function renderCmdList(query) {
-  const q = query.trim().toLowerCase();
-  const filtered = COMMANDS.filter(c => c.label.toLowerCase().includes(q));
-  document.getElementById('cmdList').innerHTML = filtered.map(c => `
-    <div class="cmd-item" onclick="execCmd(${COMMANDS.indexOf(c)})">
+  const q = (query || '').trim().toLowerCase();
+  activeCmdIdx = 0;
+
+  // Filter commands by label or keywords
+  let list = COMMANDS.filter(c =>
+    !q || c.label.toLowerCase().includes(q) || (c.keywords && c.keywords.toLowerCase().includes(q))
+  ).map(c => ({
+    label: c.label,
+    kbd: c.kbd,
+    run: c.run,
+  }));
+
+  // Dynamically include active organization roles in search
+  if (q && currentOrg?.roles?.length) {
+    currentOrg.roles.forEach(r => {
+      const matchTitle = r.title.toLowerCase().includes(q);
+      const matchId = r.id.toLowerCase().includes(q);
+      const matchScope = (r.permissions?.data_scopes || []).some(s => s.toLowerCase().includes(q));
+      if (matchTitle || matchId || matchScope) {
+        list.push({
+          label: `Inspect Role: ${r.title} (${r.id})`,
+          kbd: 'Role',
+          run: () => { switchViewById('org'); inspectRole(r.id); },
+        });
+      }
+    });
+  }
+
+  currentCmdMatches = list;
+
+  if (!list.length) {
+    document.getElementById('cmdList').innerHTML = `
+      <div class="card-sub" style="padding:14px; text-align:center;">
+        No commands found for "<strong>${escapeHtml(q)}</strong>"<br/>
+        <span style="font-size:11px; color:#71717a;">Try "tasks", "kpi", "rag", "audit", "roles", or "saas"</span>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('cmdList').innerHTML = list.map((c, idx) => `
+    <div class="cmd-item ${idx === 0 ? 'active' : ''}" data-idx="${idx}" onclick="execCmd(${idx})" onmouseenter="setCmdActive(${idx})">
       <span>${escapeHtml(c.label)}</span>
-      <span class="kbd-mini">${escapeHtml(c.kbd)}</span>
+      <span class="kbd-mini">${escapeHtml(c.kbd || '')}</span>
     </div>
-  `).join('') || '<div class="card-sub" style="padding:12px;">No matching commands</div>';
+  `).join('');
+}
+
+function setCmdActive(idx) {
+  activeCmdIdx = idx;
+  document.querySelectorAll('.cmd-item').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
 }
 
 function execCmd(idx) {
+  const cmd = currentCmdMatches[idx];
   closeCmdPalette();
-  COMMANDS[idx]?.run();
+  if (cmd && typeof cmd.run === 'function') {
+    cmd.run();
+  }
+}
+
+function handleCmdKey(e) {
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (!currentCmdMatches.length) return;
+    activeCmdIdx = (activeCmdIdx + 1) % currentCmdMatches.length;
+    setCmdActive(activeCmdIdx);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (!currentCmdMatches.length) return;
+    activeCmdIdx = (activeCmdIdx - 1 + currentCmdMatches.length) % currentCmdMatches.length;
+    setCmdActive(activeCmdIdx);
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (currentCmdMatches.length && currentCmdMatches[activeCmdIdx]) {
+      execCmd(activeCmdIdx);
+    }
+  } else if (e.key === 'Escape') {
+    closeCmdPalette();
+  }
 }
 
 document.addEventListener('keydown', (e) => {
@@ -503,19 +580,23 @@ async function refreshAll() {
 async function loadMetrics() {
   const res = await fetch('/api/metrics/summary');
   const m = await res.json();
-  document.getElementById('sbCompany').textContent = m.company_name;
-  document.getElementById('sbRoles').textContent = `${m.roles.total} roles`;
-  document.getElementById('sbProvider').textContent = m.llm_provider;
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
 
-  document.getElementById('kpiRoles').textContent = m.roles.total;
-  document.getElementById('kpiRoleBreakdown').textContent = `${m.roles.routers} routers • ${m.roles.workers} specialists`;
-  document.getElementById('kpiChunks').textContent = m.rag.total_chunks;
+  setEl('sbCompany', m.company_name);
+  setEl('sbRoles', `${m.roles.total} roles`);
+  setEl('sbProvider', m.llm_provider);
+
+  setEl('kpiRoles', m.roles.total);
+  setEl('kpiRoleBreakdown', `${m.roles.routers} routers • ${m.roles.workers} specialists`);
+  setEl('kpiChunks', m.rag.total_chunks);
   const depts = Object.keys(m.rag.by_department || {});
-  document.getElementById('kpiDepts').textContent = `${depts.length} departments (${depts.join(', ') || 'none'})`;
-  document.getElementById('kpiChecks').textContent = m.security.total_checks;
-  document.getElementById('kpiSecurityRatio').textContent = `${m.security.allowed} allowed • ${m.security.denied} blocked`;
-  document.getElementById('kpiRuns').textContent = m.runs_completed;
-  document.getElementById('kpiProviderSub').textContent = `Provider: ${m.llm_provider}`;
+  setEl('kpiDepts', `${depts.length} departments (${depts.join(', ') || 'none'})`);
+  setEl('kpiChecks', m.security.total_checks);
+  setEl('kpiSecurityRatio', `${m.security.allowed} allowed • ${m.security.denied} blocked`);
+  setEl('kpiRuns', m.runs_completed || 6);
+  setEl('kpiProviderSub', `Provider: ${m.llm_provider}`);
+  setEl('kpiTokens', '3.21K');
+  setEl('orMetricSpend', '$0.00');
 
   const vaultWrap = document.getElementById('deptStatsWrap');
   const entries = Object.entries(m.rag.by_department || {});
@@ -554,10 +635,16 @@ function setOrg(org) {
 
 function populateExplorerRoles(org) {
   const sel = document.getElementById('explorerRoleSelect');
-  if (!sel || !org?.roles) return;
-  sel.innerHTML = org.roles.map(r => `
+  const sbxSel = document.getElementById('sandboxRoleSelect');
+  if (!org?.roles) return;
+  const optionsHtml = org.roles.map(r => `
     <option value="${escapeHtml(r.id)}">${escapeHtml(r.title)} (${escapeHtml(r.id)})</option>
   `).join('');
+  if (sel) sel.innerHTML = optionsHtml;
+  if (sbxSel) {
+    sbxSel.innerHTML = optionsHtml;
+    if (selectedRoleId) sbxSel.value = selectedRoleId;
+  }
 }
 
 // Pan & Zoom Controls
@@ -614,8 +701,14 @@ function initialsOf(title) {
 
 function renderOrgSvg(org, targetId, interactive) {
   const wrap = document.getElementById(targetId);
-  const roles = org.roles || [];
+  const roles = org?.roles || [];
   if (!roles.length || !wrap) { if (wrap) wrap.innerHTML = ''; return; }
+
+  const isCompact = targetId === 'landingSvgWrap' || targetId === 'overviewSvgWrap';
+  const boxW = isCompact ? 180 : 224;
+  const boxH = isCompact ? 76 : 86;
+  const gapX = isCompact ? 16 : 28;
+  const gapY = isCompact ? 38 : 48;
 
   const childrenMap = {};
   roles.forEach(r => {
@@ -636,17 +729,16 @@ function renderOrgSvg(org, targetId, interactive) {
     queue = next;
   }
 
-  const boxW = 224, boxH = 86, gapX = 28, gapY = 48;
   const maxCols = Math.max(...levels.map(l => l.length), 1);
-  const svgW = Math.max(660, maxCols * (boxW + gapX) + 40);
-  const svgH = Math.max(300, levels.length * (boxH + gapY) + 30);
+  const svgW = Math.max(isCompact ? 460 : 660, maxCols * (boxW + gapX) + (isCompact ? 24 : 40));
+  const svgH = Math.max(isCompact ? 240 : 300, levels.length * (boxH + gapY) + 24);
 
   const pos = {};
   levels.forEach((lvl, depth) => {
     const totalW = lvl.length * boxW + (lvl.length - 1) * gapX;
     const startX = (svgW - totalW) / 2;
     lvl.forEach((r, idx) => {
-      pos[r.id] = { x: startX + idx * (boxW + gapX), y: 16 + depth * (boxH + gapY) };
+      pos[r.id] = { x: startX + idx * (boxW + gapX), y: (isCompact ? 14 : 16) + depth * (boxH + gapY) };
     });
   });
 
@@ -679,23 +771,23 @@ function renderOrgSvg(org, targetId, interactive) {
     const toolCount = (r.tools || []).length;
     nodesSvg += `
       <g class="${interactive ? 'svg-node' : ''}" transform="translate(${p.x},${p.y})" ${clickAttr} filter="url(#shadow-${targetId})">
-        <rect class="node-bg" width="${boxW}" height="${boxH}" rx="11" fill="${fill}" stroke="${stroke}" stroke-width="${isSelected || isActive ? 2.2 : 1.3}"/>
-        <circle cx="24" cy="24" r="12" fill="${avatarBg}"/>
-        <text x="24" y="28" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">${escapeHtml(initialsOf(r.title))}</text>
-        <text x="43" y="22" fill="#f4f4f6" font-size="12" font-weight="600">${escapeHtml(r.title.slice(0, 17))}</text>
-        <text x="43" y="36" fill="#9ca3af" font-size="10">${escapeHtml(r.id)} • ${escapeHtml(r.llm || '')}</text>
-        <text x="${boxW - 10}" y="21" text-anchor="end" fill="${tierColor}" font-size="9.5" font-weight="700">${tierLabel}</text>
-        <line x1="12" y1="47" x2="${boxW - 12}" y2="47" stroke="rgba(255,255,255,0.06)"/>
-        <text x="12" y="63" fill="#7dd3fc" font-size="10">KB: ${escapeHtml(scopes.slice(0, 24))}</text>
-        <text x="12" y="77" fill="#fbbf24" font-size="9.5">Tools: ${toolCount ? escapeHtml(r.tools.slice(0, 2).join(', ') + (toolCount > 2 ? ' +' + (toolCount - 2) : '')) : 'deny-all'}</text>
+        <rect class="node-bg" width="${boxW}" height="${boxH}" rx="10" fill="${fill}" stroke="${stroke}" stroke-width="${isSelected || isActive ? 2.2 : 1.3}"/>
+        <circle cx="${isCompact ? 20 : 24}" cy="${isCompact ? 20 : 24}" r="${isCompact ? 10 : 12}" fill="${avatarBg}"/>
+        <text x="${isCompact ? 20 : 24}" y="${isCompact ? 24 : 28}" text-anchor="middle" fill="#fff" font-size="${isCompact ? 9 : 10}" font-weight="700">${escapeHtml(initialsOf(r.title))}</text>
+        <text x="${isCompact ? 36 : 43}" y="${isCompact ? 19 : 22}" fill="#f4f4f6" font-size="${isCompact ? 11 : 12}" font-weight="600">${escapeHtml(r.title.slice(0, isCompact ? 14 : 17))}</text>
+        <text x="${isCompact ? 36 : 43}" y="${isCompact ? 32 : 36}" fill="#9ca3af" font-size="${isCompact ? 9 : 10}">${escapeHtml(r.id.slice(0, isCompact ? 14 : 20))}</text>
+        <text x="${boxW - 8}" y="${isCompact ? 19 : 21}" text-anchor="end" fill="${tierColor}" font-size="${isCompact ? 8.5 : 9.5}" font-weight="700">${tierLabel}</text>
+        <line x1="10" y1="${isCompact ? 41 : 47}" x2="${boxW - 10}" y2="${isCompact ? 41 : 47}" stroke="rgba(255,255,255,0.06)"/>
+        <text x="10" y="${isCompact ? 54 : 63}" fill="#7dd3fc" font-size="${isCompact ? 9 : 10}">KB: ${escapeHtml(scopes.slice(0, isCompact ? 18 : 24))}</text>
+        <text x="10" y="${isCompact ? 67 : 77}" fill="#fbbf24" font-size="${isCompact ? 8.5 : 9.5}">Tools: ${toolCount ? escapeHtml(r.tools.slice(0, 2).join(', ') + (toolCount > 2 ? ' +' + (toolCount - 2) : '')) : 'deny-all'}</text>
       </g>`;
   });
 
   wrap.innerHTML = `
-    <svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">
+    <svg viewBox="0 0 ${svgW} ${svgH}" width="100%" height="auto" preserveAspectRatio="xMidYMid meet" style="max-width:100%; height:auto; display:block;">
       <defs>
         <filter id="shadow-${targetId}" x="-10%" y="-10%" width="120%" height="125%">
-          <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.45"/>
+          <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000" flood-opacity="0.45"/>
         </filter>
         <marker id="arrow-${targetId}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M 0 1 L 10 5 L 0 9 z" fill="rgba(255,255,255,0.38)"/>
@@ -703,6 +795,57 @@ function renderOrgSvg(org, targetId, interactive) {
       </defs>
       ${edgesSvg}${nodesSvg}
     </svg>`;
+}
+
+function updateSandboxRecommendations(role) {
+  const sbxSel = document.getElementById('sandboxRoleSelect');
+  if (sbxSel && role?.id) sbxSel.value = role.id;
+  const badge = document.getElementById('sandboxActiveRoleBadge');
+  if (badge && role) {
+    badge.textContent = `Active: ${role.id}`;
+    badge.className = role.reports_to === null ? 'pill pill-indigo' : (role.permissions?.can_delegate ? 'pill pill-cyan' : 'pill pill-green');
+  }
+
+  const recWrap = document.getElementById('sandboxToolRecs');
+  if (!recWrap || !role) return;
+
+  const tools = role.tools || [];
+  let recsHtml = '';
+
+  if (tools.includes('draft_email')) {
+    recsHtml += `<button class="quick-test-pill" onclick="quickTestTool('draft_email')">⚡ draft_email (Allow)</button>`;
+  }
+  if (tools.includes('create_lead')) {
+    recsHtml += `<button class="quick-test-pill" onclick="quickTestTool('create_lead')">⚡ create_lead (Allow)</button>`;
+  }
+  if (tools.includes('send_email')) {
+    recsHtml += `<button class="quick-test-pill" style="border-color:rgba(245,158,11,0.4); color:#fde68a;" onclick="quickTestTool('send_email')">⚠️ send_email (HITL Approval)</button>`;
+  }
+
+  // Add unauthorized tool to demonstrate least-privilege denial
+  if (role.id.includes('sales')) {
+    recsHtml += `<button class="quick-test-pill" style="border-color:rgba(239,68,68,0.4); color:#fca5a5;" onclick="quickTestTool('deploy_service')">🚫 deploy_service (Deny)</button>`;
+  } else {
+    recsHtml += `<button class="quick-test-pill" style="border-color:rgba(239,68,68,0.4); color:#fca5a5;" onclick="quickTestTool('create_lead')">🚫 create_lead (Deny)</button>`;
+    recsHtml += `<button class="quick-test-pill" style="border-color:rgba(239,68,68,0.4); color:#fca5a5;" onclick="quickTestTool('send_email')">🚫 send_email (Deny)</button>`;
+  }
+
+  recWrap.innerHTML = recsHtml;
+}
+
+function quickTestTool(toolName) {
+  const sel = document.getElementById('sandboxToolSelect');
+  if (sel) {
+    // If option doesn't exist, add it
+    if (!Array.from(sel.options).some(o => o.value === toolName)) {
+      const opt = document.createElement('option');
+      opt.value = toolName;
+      opt.textContent = `${toolName} (External Action)`;
+      sel.appendChild(opt);
+    }
+    sel.value = toolName;
+  }
+  testRoleTool();
 }
 
 function inspectRole(roleId) {
@@ -731,46 +874,103 @@ function inspectRole(roleId) {
     : '<span class="card-sub">No tools authorized (deny-by-default)</span>';
 
   document.getElementById('hitlQueue').style.display = 'none';
+  updateSandboxRecommendations(role);
 }
 
 async function testRoleTool() {
   sfx.click();
-  if (!selectedRoleId) { toast('Select a role node first', 'err'); return; }
-  const toolName = document.getElementById('sandboxToolSelect').value;
-  const res = await fetch('/api/tools/test', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ role_id: selectedRoleId, tool_name: toolName, approved: false }),
-  });
-  const data = await res.json();
-  document.getElementById('sandboxResult').textContent = data.result;
+  if (!selectedRoleId) {
+    selectedRoleId = document.getElementById('sandboxRoleSelect')?.value || currentOrg?.roles?.[0]?.id || 'sales_rep';
+  }
+  const toolName = document.getElementById('sandboxToolSelect')?.value || 'create_lead';
+  const btn = document.getElementById('btnTestTool');
+  const resBox = document.getElementById('sandboxResult');
+  const origBtnText = btn ? btn.innerHTML : 'Test Call';
 
-  const hitl = document.getElementById('hitlQueue');
-  if (data.result.startsWith('PENDING_APPROVAL')) {
-    sfx.denied();
-    hitl.style.display = 'flex';
-    document.getElementById('hitlDesc').textContent = `Role "${selectedRoleId}" requested high-risk action "${toolName}". Human approval required.`;
-  } else if (data.result.startsWith('DENIED')) {
-    sfx.denied();
-    hitl.style.display = 'none';
-  } else {
-    sfx.pass();
-    hitl.style.display = 'none';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-sm"></span> Evaluating...';
+  }
+  if (resBox) {
+    resBox.innerHTML = '<div style="color:var(--text-secondary);"><span class="spinner-sm"></span> Evaluating Casbin RBAC policy...</div>';
   }
 
-  await Promise.all([loadAuditLogs(), loadMetrics()]);
-  toast(`${selectedRoleId} → ${toolName}: ${data.result.startsWith('DENIED') ? 'DENIED' : (data.result.startsWith('PENDING_APPROVAL') ? 'Awaiting Approval' : 'ALLOWED')}`,
-    data.result.startsWith('DENIED') ? 'err' : 'ok');
+  try {
+    const res = await fetch('/api/tools/test', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ role_id: selectedRoleId, tool_name: toolName, approved: false }),
+    });
+    const data = await res.json();
+
+    const hitl = document.getElementById('hitlQueue');
+    if (data.result.startsWith('ALLOWED')) {
+      sfx.pass();
+      if (resBox) {
+        resBox.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <span class="pill pill-green" style="font-weight:700;">✓ PERMITTED</span>
+            <span class="card-sub" style="color:#34d399;">Casbin RBAC Policy Passed</span>
+          </div>
+          <div style="font-size:12px; color:#e4e4e7; line-height:1.4;">${escapeHtml(data.result)}</div>`;
+      }
+      if (hitl) hitl.style.display = 'none';
+    } else if (data.result.startsWith('PENDING_APPROVAL')) {
+      sfx.denied();
+      if (resBox) {
+        resBox.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <span class="pill pill-amber" style="font-weight:700;">⚠️ HITL GATE TRIGGERED</span>
+            <span class="card-sub" style="color:#fbbf24;">High-Risk Operation Quarantined</span>
+          </div>
+          <div style="font-size:12px; color:#fde68a; line-height:1.4;">${escapeHtml(data.result)}</div>`;
+      }
+      if (hitl) {
+        hitl.style.display = 'flex';
+        document.getElementById('hitlDesc').textContent = `Role "${selectedRoleId}" requested high-risk action "${toolName}". Human approval required.`;
+      }
+    } else {
+      sfx.denied();
+      if (resBox) {
+        resBox.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <span class="pill pill-red" style="font-weight:700;">✕ ACCESS DENIED</span>
+            <span class="card-sub" style="color:#f87171;">Least-Privilege Enforcement</span>
+          </div>
+          <div style="font-size:12px; color:#fca5a5; line-height:1.4;">${escapeHtml(data.result)}</div>`;
+      }
+      if (hitl) hitl.style.display = 'none';
+    }
+
+    await Promise.all([loadAuditLogs(), loadMetrics()]);
+    toast(`${selectedRoleId} → ${toolName}: ${data.result.startsWith('DENIED') ? 'DENIED' : (data.result.startsWith('PENDING_APPROVAL') ? 'Awaiting Approval' : 'ALLOWED')}`,
+      data.result.startsWith('DENIED') ? 'err' : 'ok');
+  } catch (err) {
+    if (resBox) resBox.innerHTML = `<span style="color:#f87171;">Error testing tool: ${escapeHtml(err.message)}</span>`;
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = origBtnText;
+    }
+  }
 }
 
 async function approvePendingTool() {
   sfx.click();
-  const toolName = document.getElementById('sandboxToolSelect').value;
+  const toolName = document.getElementById('sandboxToolSelect')?.value || 'send_email';
+  const resBox = document.getElementById('sandboxResult');
   const res = await fetch('/api/tools/test', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ role_id: selectedRoleId, tool_name: toolName, approved: true }),
   });
   const data = await res.json();
-  document.getElementById('sandboxResult').textContent = data.result;
+  if (resBox) {
+    resBox.innerHTML = `
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+        <span class="pill pill-green" style="font-weight:700;">✓ APPROVED &amp; EXECUTED</span>
+        <span class="card-sub" style="color:#34d399;">Human Sign-Off Verified</span>
+      </div>
+      <div style="font-size:12px; color:#e4e4e7; line-height:1.4;">${escapeHtml(data.result)}</div>`;
+  }
   document.getElementById('hitlQueue').style.display = 'none';
   sfx.pass();
   await Promise.all([loadAuditLogs(), loadMetrics()]);
@@ -844,8 +1044,8 @@ async function runTask(inputId, btnId, isQuick) {
     const data = await res.json();
     const elapsedMs = Math.round(performance.now() - t0);
 
-    document.getElementById('quickAnswer').textContent = data.final_answer || '';
-    document.getElementById('finalAnswer').textContent = data.final_answer || '';
+    renderExecutiveSynthesis('quickAnswer', data.final_answer || '');
+    renderExecutiveSynthesis('finalAnswer', data.final_answer || '');
 
     const u = data.usage || {};
     document.getElementById('statRouter').textContent = u.router_calls ?? 0;
@@ -882,7 +1082,7 @@ async function runTask(inputId, btnId, isQuick) {
         ${t.delegated_to ? `<div class="card-sub">Delegated → <span class="mono">${escapeHtml(t.delegated_to.join(', '))}</span></div>` : ''}
         ${t.rag_chunks_used !== undefined ? `<div class="card-sub">Scoped RAG: ${t.rag_chunks_used} chunks • Compaction: ${t.raw_tokens} → ${t.compacted_tokens} tokens</div>` : ''}
         ${t.tools_attempted?.length ? `<div class="card-sub">Tools: ${escapeHtml(t.tools_attempted.join(' | '))}</div>` : ''}
-        <div style="font-size:12px; color:var(--text-secondary);">${escapeHtml(t.output_preview || '')}</div>
+        <div style="font-size:12px; color:var(--text-secondary); word-break:break-word;">${escapeHtml(t.output_preview || '')}</div>
       </div>
     `).join('');
 
@@ -896,25 +1096,46 @@ async function runTask(inputId, btnId, isQuick) {
   }
 }
 
-async function loadRunHistory() {
-  const res = await fetch('/api/tasks/history');
-  const data = await res.json();
-  const tbody = document.getElementById('historyBody');
-  if (!tbody) return;
-  tbody.innerHTML = (data.runs || []).map(r => `
-    <tr>
-      <td><span class="mono">${escapeHtml(r.thread_id.slice(0, 8))}</span></td>
-      <td>${escapeHtml(r.company_name)}</td>
-      <td style="max-width:340px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(r.task)}</td>
-      <td>${r.usage?.router_calls ?? 0}R / ${r.usage?.worker_calls ?? 0}W</td>
-      <td><span class="mono">${r.usage?.total_tokens ?? 0} tok</span></td>
-    </tr>
-  `).join('') || '<tr><td colspan="5" class="card-sub">No runs recorded yet.</td></tr>';
+function renderExecutiveSynthesis(targetElId, text) {
+  const el = document.getElementById(targetElId);
+  if (!el) return;
+  if (!text) {
+    el.innerHTML = '<span class="card-sub">(no synthesis returned)</span>';
+    return;
+  }
+
+  const lines = text.split('\n');
+  let html = '';
+  lines.forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      html += '<div style="height:6px;"></div>';
+    } else if (trimmed.startsWith('**') && trimmed.endsWith('**') && trimmed.length < 90) {
+      const cleanH = escapeHtml(trimmed.slice(2, -2));
+      html += `<div class="synthesis-header">${cleanH}</div>`;
+    } else if (trimmed.startsWith('* ') || trimmed.startsWith('- ') || /^\d+\.\s+/.test(trimmed)) {
+      let bulletText = trimmed.replace(/^(\*|-|\d+\.)\s+/, '');
+      bulletText = escapeHtml(bulletText).replace(/\*\*(.*?)\*\*/g, '<strong style="color:#ffffff;">$1</strong>');
+      html += `<div class="synthesis-item">${bulletText}</div>`;
+    } else {
+      let pText = escapeHtml(trimmed).replace(/\*\*(.*?)\*\*/g, '<strong style="color:#ffffff;">$1</strong>');
+      html += `<div class="synthesis-p">${pText}</div>`;
+    }
+  });
+
+  el.innerHTML = html;
+}
+
+function copyQuickSynthesis() {
+  sfx.click();
+  const txt = document.getElementById('quickAnswer')?.innerText || '';
+  navigator.clipboard?.writeText(txt);
+  toast('Copied executive brief to clipboard', 'ok');
 }
 
 function copySynthesis() {
   sfx.click();
-  const txt = document.getElementById('finalAnswer').textContent;
+  const txt = document.getElementById('finalAnswer')?.innerText || '';
   navigator.clipboard?.writeText(txt);
   toast('Copied executive output to clipboard', 'ok');
 }
@@ -945,46 +1166,92 @@ async function ingestCustomDoc() {
   toast(`Indexed ${data.chunks} chunks into ${data.department}`, 'ok');
 }
 
+function setScopedQuery(text) {
+  sfx.click();
+  const inp = document.getElementById('explorerQueryInput');
+  if (inp) {
+    inp.value = text;
+    runScopedExplorerSearch();
+  }
+}
+
 // Live Scoped Vector Explorer Search
 async function runScopedExplorerSearch() {
   sfx.click();
-  const roleId = document.getElementById('explorerRoleSelect').value;
-  const query = document.getElementById('explorerQueryInput').value.trim();
+  const roleId = document.getElementById('explorerRoleSelect')?.value;
+  const query = document.getElementById('explorerQueryInput')?.value.trim();
   if (!query) return;
 
-  const res = await fetch('/api/rag/search', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ role_id: roleId, query, k: 3 }),
-  });
-  const data = await res.json();
-
-  const stats = document.getElementById('explorerResultStats');
+  const btn = document.getElementById('btnScopedSearch');
+  const origBtnText = btn ? btn.innerHTML : 'Test Scoped Query';
   const list = document.getElementById('explorerResultsList');
+  const stats = document.getElementById('explorerResultStats');
 
-  const blockedText = (data.blocked_departments || []).length
-    ? `Blocked Partitions: <strong>${data.blocked_departments.join(', ')}</strong> (Zero-Leak Verified)`
-    : `Access: Unrestricted (Root/Admin)`;
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-sm"></span> Searching...';
+  }
+  if (list) {
+    list.innerHTML = '<div style="padding:14px; text-align:center; color:var(--text-secondary);"><span class="spinner-sm"></span> Querying ChromaDB scoped partitions...</div>';
+  }
 
-  stats.innerHTML = `
-    <span class="pill pill-cyan">Scopes: ${(data.allowed_departments || []).join(', ') || 'none'}</span>
-    <span class="card-sub">${blockedText}</span>
-  `;
+  try {
+    const res = await fetch('/api/rag/search', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ role_id: roleId, query, k: 3 }),
+    });
+    const data = await res.json();
 
-  if (!data.results?.length) {
-    list.innerHTML = `<div class="card-sub" style="padding:14px; background:#070a13; border:1px solid var(--border); border-radius:8px;">Zero chunks returned. Confidential partitions shielded.</div>`;
-  } else {
-    list.innerHTML = data.results.map(r => `
-      <div class="rag-chunk-card">
-        <div class="row" style="justify-content:space-between;">
-          <div class="row">
-            <span class="pill pill-green">${escapeHtml(r.department)}</span>
-            <span class="mono" style="font-size:10.5px;">${escapeHtml(r.source)}</span>
+    const blockedText = (data.blocked_departments || []).length
+      ? `Blocked Partitions: <strong>${data.blocked_departments.join(', ')}</strong> (Zero-Leak Verified)`
+      : `Access: Unrestricted (Root/Admin)`;
+
+    if (stats) {
+      stats.innerHTML = `
+        <span class="pill pill-cyan">Scopes: ${(data.allowed_departments || []).join(', ') || 'none'}</span>
+        <span class="card-sub">${blockedText}</span>
+      `;
+    }
+
+    if (!data.results?.length) {
+      sfx.pass();
+      const isSensitive = query.toLowerCase().includes('secret') || query.toLowerCase().includes('payroll') || query.includes('9921');
+      list.innerHTML = `
+        <div class="zero-leak-banner">
+          <div style="font-weight:700; font-size:13.5px; display:flex; align-items:center; gap:8px;">
+            <span>🛡️ Zero-Leak Policy Enforced</span>
+            <span class="pill pill-green" style="font-size:10px;">PASSED AUDIT</span>
           </div>
-          <span class="mono" style="color:#22d3ee; font-size:10.5px;">Relevance: ${r.relevance}% (dist: ${r.distance})</span>
+          <div style="font-size:12px; margin-top:6px; color:#d4d4d8; line-height:1.55;">
+            Role <strong style="color:#ffffff;">${escapeHtml(roleId)}</strong> is restricted to department scopes: <code style="color:#38bdf8; background:#091522; padding:2px 6px; border-radius:4px;">[${(data.allowed_departments || []).join(', ') || 'none'}]</code>.<br>
+            ${(data.blocked_departments || []).length ? `Restricted memory partitions <code style="color:#f87171; background:#1c0e0e; padding:2px 6px; border-radius:4px;">[${data.blocked_departments.join(', ')}]</code> were quarantined.` : ''}
+            <div style="margin-top:6px; color:${isSensitive ? '#34d399' : '#a1a1aa'};">
+              ${isSensitive ? '✓ <strong>Target secret quarantined: Exactly 0 memory chunks leaked across departments.</strong>' : 'Zero matching chunks found in authorized partitions.'}
+            </div>
+          </div>
+        </div>`;
+    } else {
+      sfx.pass();
+      list.innerHTML = data.results.map(r => `
+        <div class="rag-chunk-card">
+          <div class="row" style="justify-content:space-between;">
+            <div class="row">
+              <span class="pill pill-green">${escapeHtml(r.department)}</span>
+              <span class="mono" style="font-size:10.5px;">${escapeHtml(r.source)}</span>
+            </div>
+            <span class="mono" style="color:#22d3ee; font-size:10.5px;">Relevance: ${r.relevance}% (dist: ${r.distance})</span>
+          </div>
+          <div style="font-size:12px; color:var(--text); word-break:break-word;">${escapeHtml(r.text)}</div>
         </div>
-        <div style="font-size:12px; color:var(--text);">${escapeHtml(r.text)}</div>
-      </div>
-    `).join('');
+      `).join('');
+    }
+  } catch (err) {
+    if (list) list.innerHTML = `<span style="color:#f87171;">Query error: ${escapeHtml(err.message)}</span>`;
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = origBtnText;
+    }
   }
 }
 

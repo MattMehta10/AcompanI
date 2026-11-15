@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Dict, Any, List
 import yaml
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from api.schemas import (
@@ -59,6 +59,17 @@ def serve_ui():
     if not STATIC_HTML.exists():
         return HTMLResponse("<h1>UI not found</h1>", status_code=404)
     return HTMLResponse(STATIC_HTML.read_text(encoding="utf-8"))
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    webp_path = STATIC_DIR / "logo.webp"
+    if webp_path.exists():
+        return FileResponse(webp_path, media_type="image/webp")
+    fav_path = STATIC_DIR / "logo.svg"
+    if fav_path.exists():
+        return FileResponse(fav_path, media_type="image/svg+xml")
+    return HTMLResponse("", status_code=204)
 
 
 @app.get("/api/health", tags=["Telemetry"])

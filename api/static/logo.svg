@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Vibrant brushed metallic cyber persimmon gradient -->
+    <linearGradient id="acmpOrangeBody" x1="15%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#FF8A4C"/>
+      <stop offset="25%" stop-color="#FA6D35"/>
+      <stop offset="65%" stop-color="#EA5F2D"/>
+      <stop offset="100%" stop-color="#C24413"/>
+    </linearGradient>
+
+    <!-- Top facet highlight for upper cantilever arm -->
+    <linearGradient id="acmpArmFacet" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFA06B"/>
+      <stop offset="50%" stop-color="#FA6E36"/>
+      <stop offset="100%" stop-color="#EA5F2D"/>
+    </linearGradient>
+
+    <!-- Left facet bevel for 3D depth -->
+    <linearGradient id="acmpLeftBevel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFBD99"/>
+      <stop offset="40%" stop-color="#FF8850"/>
+      <stop offset="100%" stop-color="#D94E1A"/>
+    </linearGradient>
+
+    <!-- Bottom edge rim reflection -->
+    <linearGradient id="acmpBottomBevel" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFA87D"/>
+      <stop offset="50%" stop-color="#FA682E"/>
+      <stop offset="100%" stop-color="#B83A09"/>
+    </linearGradient>
+
+    <!-- White Prism: Lit Left Facet -->
+    <linearGradient id="acmpPrismLit" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="70%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#E2E8F0"/>
+    </linearGradient>
+
+    <!-- White Prism: Shaded Right Facet -->
+    <linearGradient id="acmpPrismShaded" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E2E8F0"/>
+      <stop offset="50%" stop-color="#CBD5E1"/>
+      <stop offset="100%" stop-color="#94A3B8"/>
+    </linearGradient>
+
+    <!-- Atmospheric drop shadow & warm neon glow -->
+    <filter id="acmpEmblemShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.85"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="16" flood-color="#EA5F2D" flood-opacity="0.32"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#acmpEmblemShadow)">
+    <!-- Main Orange Monogram Body with Cutout (EvenOdd fill rule creates true transparent hole) -->
+    <path fill-rule="evenodd"
+          d="M 195 24
+             L 265 145
+             L 460 145
+             L 398 230
+             L 288 230
+             L 358 385
+             L 470 435
+             L 32 435
+             L 115 110
+             Z
+             M 180 178
+             L 288 230
+             L 280 385
+             L 134 385
+             Z"
+          fill="url(#acmpOrangeBody)" />
+
+    <!-- Top Cantilever Arm Surface Highlight -->
+    <polygon points="265,145 460,145 398,230 288,230" fill="url(#acmpArmFacet)" opacity="0.35" />
+
+    <!-- Left Outer Bevel Chamfer (Precision Machined Edge) -->
+    <polyline points="195,24 115,110 32,435" fill="none" stroke="url(#acmpLeftBevel)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+
+    <!-- Bottom Outer Rim Bevel -->
+    <line x1="32" y1="435" x2="470" y2="435" stroke="url(#acmpBottomBevel)" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
+
+    <!-- Inner Window Top Bevel -->
+    <line x1="180" y1="178" x2="288" y2="230" stroke="#FFA67A" stroke-width="2.5" opacity="0.6"/>
+
+    <!-- White 3D Prism Shard (The "I" / AI Core) -->
+    <!-- Left Facet (Light) -->
+    <polygon points="288,230 280,385 308,385" fill="url(#acmpPrismLit)" />
+    <!-- Right Facet (Shaded) -->
+    <polygon points="288,230 308,385 358,385" fill="url(#acmpPrismShaded)" />
+    <!-- Center Ridge Highlight -->
+    <line x1="288" y1="230" x2="308" y2="385" stroke="#FFFFFF" stroke-width="1.5" opacity="0.9" />
+    <!-- Base Seam -->
+    <line x1="280" y1="385" x2="358" y2="385" stroke="#94A3B8" stroke-width="1.8" />
+  </g>
+</svg>

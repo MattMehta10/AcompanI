@@ -431,6 +431,7 @@ function switchView(name, navBtn) {
   };
   document.getElementById('topbarViewTitle').textContent = titles[name] || name;
   if (name === 'security') loadSecurityMatrix();
+  if (name === 'tasks') loadRunHistory();
 }
 
 function switchViewById(name) {
@@ -1153,6 +1154,32 @@ function copySynthesis() {
   const txt = document.getElementById('finalAnswer')?.innerText || '';
   navigator.clipboard?.writeText(txt);
   toast('Copied executive output to clipboard', 'ok');
+}
+
+async function loadRunHistory() {
+  const tbody = document.getElementById('historyBody');
+  if (!tbody) return;
+  try {
+    const res = await fetch('/api/tasks/history');
+    if (!res.ok) return;
+    const data = await res.json();
+    const runs = data.runs || [];
+    if (!runs.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="card-sub" style="padding:16px; text-align:center;">No task orchestration runs recorded yet in this session.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = runs.map(r => `
+      <tr>
+        <td><span class="mono" style="color:var(--accent); font-weight:600;">${escapeHtml((r.thread_id || '').slice(0, 8))}</span></td>
+        <td><strong>${escapeHtml(r.company_name || 'Autonomous Enterprise')}</strong></td>
+        <td style="max-width:340px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${escapeHtml(r.task || '')}">${escapeHtml(r.task || '')}</td>
+        <td><span class="pill pill-cyan">${r.usage?.router_calls ?? 0} Router</span> / <span class="pill pill-green">${r.usage?.worker_calls ?? 0} Worker</span></td>
+        <td><span class="mono" style="color:#e4e4e7;">${(r.usage?.total_tokens ?? 0).toLocaleString()} tok</span></td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="5" class="card-sub" style="color:#f87171;">Failed to load history: ${escapeHtml(err.message)}</td></tr>`;
+  }
 }
 
 async function ingestSamples() {

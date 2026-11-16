@@ -1,171 +1,267 @@
-# AcompanI — Comprehensive Feature Checklist & End-to-End User Testing Guide
+# AcompanI — Enterprise End-to-End User Testing Manual & Verification Guide
 
-> **Autonomous Hierarchical Multi-Agent Organization Operating System**  
-> *Verification Date:* November 2026 • *Build Status:* **ALL SYSTEMS GREEN (9/9 Evals Passed, 100% Core Verification)**
-
----
-
-## 📋 Master System Feature Checklist
-
-| # | System Subsystem | Feature Description | Automated Status | UI Status |
-|---|---|---|:---:|:---:|
-| **1** | **Brand & Visuals** | Logo (`logo.webp`) without bounding boxes/card borders | ✅ VERIFIED | ✅ ACTIVE |
-| **2** | **Brand Typography** | Unified `<span class="brand-text">AcompanI</span>` (0px gap between A, compan, I) | ✅ VERIFIED | ✅ ACTIVE |
-| **3** | **Color Theme** | Electric Cyber Persimmon (`#EA5F2D`) on pitch black (`#000000`) | ✅ VERIFIED | ✅ ACTIVE |
-| **4** | **3D Constellation** | Orbital satellite nodes (`Eng`, `Sales`, `Fin`, `Llama 3.3 70B`) + Particle Web | ✅ VERIFIED | ✅ ACTIVE |
-| **5** | **Org Architect** | Dynamic LLM-driven organizational DAG synthesis (`/api/org/generate`) | ✅ VERIFIED | ✅ ACTIVE |
-| **6** | **Runtime Deploy** | Direct org chart compilation to LangGraph StateGraph (`/api/org/deploy`) | ✅ VERIFIED | ✅ ACTIVE |
-| **7** | **Interactive DAG** | Pan, zoom (`+`, `−`, `Fit`), node inspection, and dynamic edge rendering | ✅ VERIFIED | ✅ ACTIVE |
-| **8** | **Casbin RBAC** | Strict deny-by-default role-to-tool permission boundary (`/api/tools/test`) | ✅ VERIFIED | ✅ ACTIVE |
-| **9** | **HITL Quarantine** | Human-in-the-loop approval workflow for high-risk tools (`deploy_service`) | ✅ VERIFIED | ✅ ACTIVE |
-| **10** | **ChromaDB RAG** | Department-partitioned vector memory (`engineering`, `sales`, `finance`) | ✅ VERIFIED | ✅ ACTIVE |
-| **11** | **Tenant Isolation** | RAG query scope isolation (Sales/Eng blocked from reading payroll secrets) | ✅ VERIFIED | ✅ ACTIVE |
-| **12** | **Task Pipeline** | Hierarchical supervisor-worker execution with tiered cost routing (`/api/tasks`)| ✅ VERIFIED | ✅ ACTIVE |
-| **13** | **Red-Team Probes** | Automated 3-stage security exploit simulator (`/api/security/probe`) | ✅ VERIFIED | ✅ ACTIVE |
-| **14** | **Governance Seal** | Cryptographic compliance certificate with printable audit modal (`/cert`) | ✅ VERIFIED | ✅ ACTIVE |
-| **15** | **Telemetry Stream** | Real-time structured audit logs with time-filtering and sync (`/api/audit/logs`) | ✅ VERIFIED | ✅ ACTIVE |
-| **16** | **Command Palette** | Global keyboard shortcut `Ctrl + K` with instant command search | ✅ VERIFIED | ✅ ACTIVE |
+> **AcompanI Autonomous Operating System**  
+> **Target Audience:** User / QA / Enterprise Executive / Technical Evaluator  
+> **System Status:** All 9 Core Evals Passing • Production DAG & Security Gate Verified  
+> **Brand Identity:** Electric Persimmon (`#EA5F2D`) & Deep Charcoal on Pitch Black
 
 ---
 
-## 🧪 Step-by-Step User Testing Follow-Along Guide
+## 🚀 Quick Start (Local Server Execution)
 
-Follow these steps directly in your web browser (`http://127.0.0.1:8000`) to test and demonstrate every feature as an end-user.
+Open PowerShell in the project directory (`MINOR PROJECT\ai-company`) and run:
 
-### Prerequisites: Start the Platform
-In your terminal, execute:
 ```powershell
 .\run_acompani.ps1
 ```
-*(Or run `.\.venv\Scripts\uvicorn.exe api.main:app --host 127.0.0.1 --port 8000 --reload`)*.  
-Then open your browser to **`http://127.0.0.1:8000`**.
+
+*(Alternative direct launch)*:
+```powershell
+.\.venv\Scripts\uvicorn.exe api.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+Once started, open your web browser to:
+👉 **`http://127.0.0.1:8000`**
 
 ---
 
-### Phase 1: Public Showcase & Branding Inspection
-1. **Check the Brand & Logo:**
-   - Look at the top-left navbar: Notice the custom **AcompanI emblem** glowing with a subtle persimmon reflection.
-   - Verify that **A** and **I** in **`AcompanI`** are orange (`#EA5F2D`), while `compan` is clean white, with **no gap** between the letters.
-2. **Hero 3D Orbital Constellation:**
-   - Observe the center of the hero section: The transparent metallic emblem rotates seamlessly in the center with zero outer borders or square card boxes.
-   - Move your mouse across the canvas: Watch the interactive ember particle web link and track your cursor.
-3. **Interactive Mini-Simulator:**
-   - Scroll down to the **Interactive Organization Simulator** card.
-   - Click the preset chips: **`B2B SaaS`**, **`E-Commerce`**, or **`FinTech`**.
-   - Click **`Synthesize Org Chart`**: Watch the roles dynamically populate in the window.
-   - Click **`Animate Delegation`**: Watch the live step-by-step trace waterfall execute from Router to Worker.
-4. **Interactive ROI Calculator:**
-   - Scroll down to **Provable Economics**.
-   - Drag the **Monthly Workflow Executions** and **Specialist Subagents** sliders.
-   - Watch the **Annual Cost Savings** and **AcompanI Tiered Mesh** numbers compute live in real time.
-5. **Interactive Attack Simulator (Showcase):**
-   - Under **Attack Arena**, click **`Simulate RAG Exploit →`** (watch the prompt injection attempt get blocked with zero leaks).
-   - Click **`Simulate Escalation →`** (watch Casbin RBAC intercept unauthorized database migration).
-   - Click **`Test HITL Quarantine →`** (watch the production deployment tool freeze until human signoff).
+## 🧭 Master Navigation & Views Overview
+
+| View Name | Primary Function | Keyboard Shortcut |
+| :--- | :--- | :--- |
+| **Product Showcase** | Landing page, 3D emblem constellation, ROI calculator, interactive mini-simulators | Press `Home` in palette |
+| **Tab 1: Command Center** | Real-time OpenRouter metrics, cost telemetry, quick executive tasks, compliance seal | `Ctrl + K` $\rightarrow$ `1` |
+| **Tab 2: Org Architect Studio** | LLM-driven DAG synthesis, node inspector, interactive Casbin RBAC sandbox | `Ctrl + K` $\rightarrow$ `2` |
+| **Tab 3: Task Orchestrator** | Hierarchical LangGraph execution, tiered router-worker cost arbitrage, run history | `Ctrl + K` $\rightarrow$ `3` |
+| **Tab 4: Knowledge Vault** | Scoped ChromaDB RAG, cross-tenant isolation audit, custom document ingestion | `Ctrl + K` $\rightarrow$ `4` |
+| **Tab 5: Security & Governance** | Automated 3-stage red-team exploit suite, Casbin policy matrix, tamper-evident audit stream | `Ctrl + K` $\rightarrow$ `5` |
 
 ---
 
-### Phase 2: Enter the Enterprise Management Studio
-Click the **`Launch Console`** button in the navbar (or press **`Ctrl + K`** and select *Go to Command Center*).
-
-#### Tab 1: Command Center (`Activity & Telemetry`)
-1. **5 OpenRouter Metric Cards:**
-   - Inspect the top cards: **Total spend**, **Requests**, **Token volume**, **Zero-leak rate**, and **Blended $/1M**.
-   - Notice the live SVG sparklines on active cards.
-2. **Top Apps & Top Agent Roles:**
-   - Review the two split panels showing live token distribution and tool gateways.
-3. **Quick Task Launch & Formatted Executive Synthesis:**
-   - Type a prompt in the Quick Task box (e.g., `"Analyze Q3 customer acquisition cost and draft a summary"`).
-   - Click **`Execute Task`**:
-     - Notice the execution status and millisecond latency tracker.
-     - The output is rendered in a bounded, scrollable **Executive Synthesis briefing card** with highlighted headings and bullets.
-     - **Layout Integrity:** Notice that no matter how long the synthesis is, the dashboard **never expands horizontally** and **no horizontal scrollbar appears**.
-   - Click **`Copy Brief`** to quickly copy the plain text deliverable to your clipboard.
-4. **Audit Certificate Seal:**
-   - Click **`Audit Certificate`** in the top-right:
-   - Notice your **AcompanI Logo** stamped on the official enterprise governance seal.
-   - Click **`Print / Save PDF`** to test the printer stylesheet, or click **`✕`** to close.
+## 🧪 Comprehensive Step-by-Step Test Scenarios (With Sample Inputs)
 
 ---
 
-### Tab 2: Org Architect (`Trends` or Sidebar `Org Architect`)
-1. **Generate a New Org Hierarchy:**
-   - Click the chip **`Preset: FinTech`** (or type any business description into the input box).
-   - Click **`Generate Org Chart`**:
-   - Watch the backend synthesize a custom organizational structure and render the **Interactive Node Graph**.
-2. **Test Graph Interactions:**
-   - Click the **`+`** button to zoom in, **`−`** to zoom out, and **`Fit`** to re-center.
-   - Click on any role node in the graph: Notice the Inspector panel on the right updates with that agent's exact permissions, data scopes, and allowed tools.
-3. **Interactive RBAC Tool Sandbox (With Role Switcher & 1-Click Tests):**
-   - You can test any role directly using the **Switch Role to Test** dropdown or by clicking nodes in the graph.
-   - **Test 1: Permitted Tool Execution (`sales_rep`):**
-     - Select `sales_rep`. Notice the recommended 1-click test pills appear.
-     - Click **`⚡ draft_email (Allow)`** or select `draft_email` and click **`Test Call`**.
-     - Notice the loading state (`Evaluating...`), followed by a glowing green **`✓ PERMITTED`** badge with policy confirmation.
-   - **Test 2: Human-in-the-Loop Quarantine Gate (`send_email`):**
-     - Click **`⚠️ send_email (HITL Approval)`**.
-     - Notice the glowing amber **`⚠️ HITL GATE TRIGGERED`** badge appears, and the Human-in-the-Loop approval card pops up.
-     - Click **`Approve & Execute`**: Watch the status change to **`✓ APPROVED & EXECUTED`** with a success notification.
-   - **Test 3: Least-Privilege Access Denial (`engineering_manager`):**
-     - Switch role to `engineering_manager`.
-     - Click **`🚫 create_lead (Deny)`** (or any CRM tool).
-     - Notice the glowing red **`✕ ACCESS DENIED`** badge confirming Casbin least-privilege enforcement.
-4. **Deploy to Runtime:**
-   - Click **`Deploy to Runtime & Sync Casbin`**: Watch the toast confirm live deployment.
+### Phase 1: Brand & Landing Page Integrity Check
+
+1. **Brand Emblem & Typography:**
+   - Look at the top-left navigation:
+     - Notice the **AcompanI** emblem (no borders, no square box).
+     - Notice the brand text **`AcompanI`**: The **A** and **I** are glowing persimmon (`#EA5F2D`), while `compan` is clean white, with **0px gap**.
+2. **Hero 3D Particle Constellation:**
+   - Move your mouse around the rotating central metallic badge: Observe the ember particle web dynamically connect and follow your cursor coordinates.
+3. **Interactive Mini-Simulator (Section 1):**
+   - Click the preset button: **`FinTech`**.
+   - Click **`Synthesize Org Chart`**: Watch the DAG nodes (`CEO`, `Eng Manager`, `Fraud Specialist`, `Sales Rep`) populate dynamically.
+   - Click **`Animate Delegation`**: Watch the step-by-step telemetry packet stream print router decomposition, scoping, compaction, and arbitrage savings.
+4. **Interactive ROI Economics Calculator:**
+   - Drag **Monthly Workflow Executions** to `50,000`.
+   - Drag **Specialist Subagents** to `12`.
+   - Observe the live annual savings projection update dynamically.
 
 ---
 
-### Tab 3: Task Orchestrator (`Execute Task →` or Sidebar `Task Orchestrator`)
-1. **Run Multi-Agent Task:**
-   - Click the chip **`Cross-Dept Launch`** (or **`Backend Spec`**).
-   - Click **`Execute Across Hierarchy`**.
-   - Watch the real-time execution telemetry:
-     - **Router Model:** Llama 3.1 8B (fast orchestration)
-     - **Worker Model:** Llama 3.3 70B (high-accuracy specialist synthesis)
-     - **Usage Breakdown:** Router tokens, Worker tokens, and cost savings bar.
-   - Notice the synthesis is contained in an executive viewport that **never blows out the viewport width or causes horizontal scrolling**.
-2. **Copy Result:**
-   - Click **`Copy Output`**: Notice the success toast confirming clipboard copy.
+### Phase 2: Enter Enterprise Management Studio
+
+Click **`Launch Console`** in the top navbar (or press `Ctrl + K` and press `1`).
 
 ---
 
-### Tab 4: Knowledge Vault / ChromaDB RAG (`Explore` or Sidebar `Knowledge Vault`)
-1. **Re-Seed Sample Knowledge:**
-   - Click **`Re-Seed Sample KB`**: Seeds ChromaDB with partitioned department docs.
-2. **Test Scoped Query:**
-   - Select role **`Engineering Manager`** and click the quick preset chip **`🛠️ Engineering Specs`**.
-   - Notice the button changes to **`Searching...`** with an animated spinner.
-   - Watch relevant engineering architectural chunks return with similarity scores.
-3. **Test Cross-Tenant Isolation (Quarantine & Zero-Leak Audit):**
-   - Select role **`Sales Representative`** (has no finance scope).
-   - Click the preset chip **`🛡️ ACME-FIN-9921-SECRET (Quarantine Test)`** (or type `ACME-FIN-9921-SECRET` and press **Enter**).
-   - Notice the instant loading feedback, followed by a prominent glowing green security banner:
-     **`🛡️ Zero-Leak Policy Enforced (PASSED AUDIT)`**
-     Explaining that the financial secret was quarantined from `sales_rep` and **exactly 0 chunks leaked**.
-4. **Index Custom Knowledge:**
-   - Type a custom document title and content, select a department, and click **`Index into ChromaDB`**.
-   - Notice the instant vector indexing confirmation.
+### Tab 1: Command Center (`Activity & Telemetry`)
+
+#### Test 1.1: Live OpenRouter Telemetry Cards
+- **What to look for:**
+  - **Total Spend Card:** Shows calculated token spend.
+  - **Requests:** Count of API transactions.
+  - **Zero-Leak Rate:** Displays `100.0%` with a green shield.
+  - **Blended Rate:** Displays cost per 1M tokens.
+
+#### Test 1.2: Quick Task Execution & Formatted Executive Briefing
+- **Sample Input (Copy & Paste):**
+  ```text
+  Analyze our Q3 customer acquisition velocity, evaluate API infrastructure bottlenecks, and synthesize an executive strategic brief for the board.
+  ```
+- **Action:** Paste into the **Quick Task** input box and click **`Execute Task`**.
+- **Expected Result:**
+  - A loading indicator displays with real-time millisecond elapsed timer.
+  - Returns a structured **Executive Synthesis** card with clear bullet points and action items.
+  - **Layout Check:** Verify that the dashboard maintains clean margins and **no horizontal scrollbar appears**.
+  - Click **`Copy Brief`**: A toast notification appears confirming: `Brief copied to clipboard!`.
+
+#### Test 1.3: Cryptographic Audit Certificate Seal
+- **Action:** Click the **`Audit Certificate`** button in the top-right toolbar.
+- **Expected Result:**
+  - A modal opens displaying the **AcompanI Official Compliance Seal**.
+  - Notice the **Certificate ID** (`ACMP-ENT-...`), **Signature Hash** (`SHA256:...`), **Zero-Trust Grade** (`A+ ZERO-TRUST VERIFIED`), and DAG validity status.
+  - Click **`Print / Save PDF`** to test the print styling, then click **`✕`** to close.
 
 ---
 
-### Tab 5: Security & RBAC Matrix (`Guardrails` or Sidebar `Security`)
-1. **Automated Red-Team Probe Suite:**
-   - Click **`Run Red-Team Suite`**:
-   - Three automated probes execute immediately:
-     1. Cross-department vector leak attempt → **Blocked (0 leaks)**.
-     2. Unauthorized tool escalation → **DENIED by Casbin**.
-     3. High-risk production tool bypass → **GATED by Human Quarantine**.
-2. **Inspect RBAC Policy Matrix:**
-   - Scroll through the **Casbin Enforcement Matrix** table to view every active `(Role, Resource, Action)` permission rule.
-3. **Audit Log Stream:**
-   - Scroll through the live **Audit Logs**:
-   - Inspect timestamps, caller roles, action types, and deterministic `ALLOW` / `DENY` verdicts.
-   - Click **`Refresh Logs`** to fetch latest telemetry, or **`Clear Logs`** to reset the view.
+### Tab 2: Org Architect Studio (`Org Hierarchy & RBAC`)
+
+Click **`Org Architect`** in the sidebar or press `Ctrl + K` $\rightarrow$ `2`.
+
+#### Test 2.1: Synthesize a Brand-New Enterprise Organization DAG
+- **Sample Input 1 (Healthcare SaaS):**
+  ```text
+  A HIPAA-compliant healthcare workflow platform requiring secure patient database engineering, clinical compliance auditing, hospital enterprise sales, and physician customer success.
+  ```
+- **Action:** Paste the text above into the **Business Summary & Strategic Objective** textarea and click **`Generate Org Chart`**.
+- **Expected Result:**
+  - The backend synthesizes a custom multi-tier hierarchy:
+    - Root: `Chief Executive Officer` / `CEO`
+    - Routers: `Engineering Manager`, `Compliance Manager`, `Sales Manager`
+    - Workers: `HIPAA Dev`, `Clinical Auditor`, `Sales Rep`
+  - The **Interactive Node Graph** renders the hierarchical DAG with SVG connector lines.
+  - Graph controls:
+    - Click **`+`** to zoom in.
+    - Click **`−`** to zoom out.
+    - Click **`Fit`** to re-center.
+    - Click on any node (e.g. `Engineering Manager`): The **Role Inspector** updates on the right with that node's exact data scopes, tools, and supervisor chain.
+
+#### Test 2.2: Interactive RBAC Tool Sandbox
+Test how Casbin deterministic security gates enforce least privilege in real time:
+
+- **Case A: Permitted Tool Execution**
+  - **Role:** Select `Sales Representative (sales_representative)` or `sales_rep`.
+  - **Tool:** Select `draft_email` (or click quick pill `⚡ draft_email (Allow)`).
+  - **Click:** **`Test Call`**.
+  - **Expected Result:** Glowing green **`✓ PERMITTED`** badge appears with draft email content and Casbin confirmation: `sales_representative -> draft_email: ALLOWED`.
+
+- **Case B: Human-in-the-Loop (HITL) Quarantine Gate**
+  - **Role:** Keep `Sales Representative` or `Sales Manager`.
+  - **Tool:** Click the quick pill **`⚠️ send_email (HITL Approval)`**.
+  - **Expected Result:**
+    - Glowing amber **`⚠️ HITL GATE TRIGGERED`** badge appears.
+    - A yellow warning card appears: *"Pending human supervisor sign-off before dispatching external email"*.
+    - Click **`Approve & Execute`**: Status instantly transitions to green **`✓ APPROVED & EXECUTED`** with confirmation: *"Human approval confirmed. Outbound email dispatched."*
+
+- **Case C: Least-Privilege Denial**
+  - **Role:** Switch role to `Engineering Manager (engineering_manager)`.
+  - **Tool:** Click the red quick pill **`🚫 create_lead (Deny)`** (or select `create_lead` and click `Test Call`).
+  - **Expected Result:** Glowing red **`✕ ACCESS DENIED`** badge appears with policy reason: `DENIED: role 'engineering_manager' is not authorized to execute 'create_lead'`.
+
+#### Test 2.3: Deploy to Runtime
+- **Action:** Click **`Deploy to Runtime & Sync Casbin`**.
+- **Expected Result:** Toast confirms: `Org chart deployed to runtime! Casbin policies synced.`
 
 ---
 
-### Global Controls & Hotkeys
-- **Command Palette:** Press **`Ctrl + K`** anywhere to open the command palette. Type to filter, press `Enter` or click to jump anywhere instantly. Press `Escape` to close.
-- **Audio Synthesis:** Click the speaker icon in the top navbar to toggle procedural sound synthesis for clicks, approvals, and security alerts.
-- **Top Sync Button:** Click **`Sync`** in the topbar to synchronize metrics across all open tabs.
-- **Red-Team Shortcut:** Click **`Red-Team Audit`** in the topbar to immediately trigger a full security verification run.
+### Tab 3: Task Orchestrator & Cost Telemetry
+
+Click **`Task Orchestrator`** in the sidebar or press `Ctrl + K` $\rightarrow$ `3`.
+
+#### Test 3.1: Execute Hierarchical Multi-Agent Task
+- **Sample Input (Paste into Dispatch Objective):**
+  ```text
+  Design the rate-limited FastAPI endpoint architecture based on engineering standards and draft a merchant integration update.
+  ```
+- **Action:** Click **`Execute Across Hierarchy`**.
+- **Expected Result:**
+  - Notice the execution thread identifier (e.g. `Thread a1ea4323 • 53230ms`).
+  - **Delegation & Compaction Waterfall (Right Column):**
+    - `CEO` decomposes the task and delegates to `Engineering Manager`.
+    - `Engineering Manager` routes to `Backend Developer`.
+    - `Backend Developer` performs scoped vector retrieval and compacts raw worker tokens down to concise facts.
+    - Response bubbles back up to `CEO` for executive synthesis.
+  - **Cost Arbitrage Economics (Left Column):**
+    - Displays exact **Router Calls** vs. **Worker Calls**.
+    - Token split shows ~**75% - 85% routed via cheap supervisor models**.
+    - Projected cost bar demonstrates **69% - 85% savings** vs. monolithic models.
+  - **Session Orchestration History (Bottom Table):**
+    - The table updates with a new row showing: `THREAD ID`, `COMPANY`, `OBJECTIVE PREVIEW`, `TIER SPLIT`, and `TOKENS`.
+
+---
+
+### Tab 4: Department Knowledge Vault (Scoped ChromaDB RAG)
+
+Click **`Knowledge Vault`** in the sidebar or press `Ctrl + K` $\rightarrow$ `4`.
+
+#### Test 4.1: Authorized Department Query
+- **Role Dropdown:** Select `Engineering Manager (engineering_manager)`.
+- **Query Input:** Click the preset button **`🛠️ Engineering Specs`** (or type `"What is the database connection string and API gateway architecture?"`).
+- **Click:** **`Test Scoped Query`**.
+- **Expected Result:**
+  - Button shows `<span class="spinner-sm"></span> Searching...` and smoothly resets to `Test Scoped Query`.
+  - Top badge displays:
+    `Scopes: engineering` | `Blocked Partitions: finance, sales (Zero-Leak Verified)`.
+  - **2 Relevant Engineering Chunks Return:**
+    - `engineering.txt` — FastAPI v0.115+ specs and rate limiting middleware (~58% relevance).
+    - `engineering.txt` — Internal database host `pg-prod-internal.acme.local` (~57% relevance).
+
+#### Test 4.2: Cross-Tenant Isolation Audit (Quarantine Test)
+- **Role Dropdown:** Select `Sales Representative (sales_representative)`.
+- **Query Input:** Click the preset button **`🛡️ ACME-FIN-9921-SECRET (Quarantine Test)`** (or type `"ACME-FIN-9921-SECRET"`).
+- **Click:** **`Test Scoped Query`**.
+- **Expected Result:**
+  - Top badge displays:
+    `Scopes: sales` | `Blocked Partitions: engineering, finance (Zero-Leak Verified)`.
+  - Exactly **0 chunks** return from the unauthorized `finance` partition.
+  - A prominent glowing green banner appears:
+    > **🛡️ Zero-Leak Policy Enforced [PASSED AUDIT]**  
+    > *Role `sales_representative` is restricted to department scopes: `[sales]`.*  
+    > *Restricted memory partitions `[engineering, finance]` were quarantined.*  
+    > **✓ Target secret quarantined: Exactly 0 memory chunks leaked across departments.**
+
+#### Test 4.3: Custom Scoped Document Ingestion
+- **Under "Ingest Scoped Document" (Bottom Left Card):**
+  - **Department Scope:** `hr`
+  - **Source Filename:** `benefits_policy_2026.txt`
+  - **Document Content (Copy & Paste):**
+    ```text
+    AcompanI Employee Benefits & Stipends Guide:
+    - Annual Wellness Stipend: $1,200 per employee for gym, ergonomic setup, and mental health.
+    - Continuous Learning Budget: $2,500 annually for books, conferences, and certifications.
+    - Confidential HR Concierge: hr-concierge@acompani.internal.
+    ```
+  - Click **`Index into ChromaDB`**.
+- **Expected Result:**
+  - Status updates: `Indexed 1 chunk(s) under 'hr'`.
+  - The partition chart on the right reflects the newly indexed department.
+  - *(To restore the pristine default KB at any time, simply click `[Re-Seed Sample KB]` in the top-right).*
+
+---
+
+### Tab 5: Security & RBAC Matrix (`Guardrails & Red-Team`)
+
+Click **`Security`** in the sidebar or press `Ctrl + K` $\rightarrow$ `5`.
+
+#### Test 5.1: Automated Red-Team Isolation Suite
+- **Action:** Click **`Run Red-Team Suite`** in the top bar.
+- **Expected Result:** 3 live adversarial attacks run in parallel with real-time verdicts:
+  1. **RAG Scope Isolation:** Displays <span style="color:#22c55e; font-weight:bold;">PASS (0 leaks)</span> — `Query for ACME-FIN-9921-SECRET blocked (0 leaks)`.
+  2. **Casbin Tool Guard:** Displays <span style="color:#ef4444; font-weight:bold;">DENIED</span> — `engineering_manager -> create_lead: DENIED (not authorized)`.
+  3. **Human-Approval Gate:** Displays <span style="color:#f59e0b; font-weight:bold;">GATED</span> — `sales_manager -> send_email: PENDING_APPROVAL (requires human approval)`.
+
+#### Test 5.2: Live Tamper-Evident Audit Stream
+- **Action:** Scroll down to **Audit Stream (`authority/audit_log.jsonl`)**.
+- **Features to Verify:**
+  - Displays structured telemetry: `ROLE`, `ACTION`, `RESOURCE`, `DECISION`, and `POLICY REASON`.
+  - **Filter Dropdown:** Switch the dropdown from `All Decisions` to `DENIED Only` (verifies least-privilege denials) and `ALLOWED Only` (verifies authorized operations).
+  - Click **`Refresh Logs`**: Refetches the latest telemetry.
+
+---
+
+### Phase 3: Global Hotkeys & Quality-of-Life Controls
+
+1. **Global Command Palette (`Ctrl + K`):**
+   - Press **`Ctrl + K`** on your keyboard from any view.
+   - Type `"task"` $\rightarrow$ press **Enter** to jump immediately to the Task Orchestrator.
+   - Press **`Ctrl + K`**, type `"cert"` $\rightarrow$ press **Enter** to pop open the Audit Certificate Modal.
+2. **Procedural Audio Effects:**
+   - Click the speaker icon in the top-right header to enable or disable tactile sound effects for button clicks, approval transitions, and security blocks.
+3. **Top Bar Quick Actions:**
+   - Click **`Sync`** in the top bar to synchronize metrics across components.
+   - Click **`Red-Team Audit`** to trigger the automated security verification suite from anywhere in the app.
+
+---
+
+## 🎯 Verification Sign-Off Checklist
+
+- [ ] **Branding:** AcompanI logo and typography render with zero borders and zero gaps.
+- [ ] **Org DAG:** LLM synthesizes valid directed acyclic graphs without cycles.
+- [ ] **Tool Sandbox:** Permitted tools execute; unauthorized tools are rejected with red badges; sensitive tools pause for human approval.
+- [ ] **Task Orchestrator:** Token usage reflects router-worker tiered savings with responsive, non-overflowing executive synthesis.
+- [ ] **Scoped RAG:** Engineering specs return for engineering roles; financial secrets are completely quarantined for non-finance roles with 0 leaks.
+- [ ] **Red-Team Suite:** Automated attack probes pass with 100% containment.
+- [ ] **Audit Trail:** JSONL telemetry stream records all deterministic security decisions.

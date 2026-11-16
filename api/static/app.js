@@ -1225,7 +1225,6 @@ async function runScopedExplorerSearch() {
   if (!query) return;
 
   const btn = document.getElementById('btnScopedSearch');
-  const origBtnText = btn ? btn.innerHTML : 'Test Scoped Query';
   const list = document.getElementById('explorerResultsList');
   const stats = document.getElementById('explorerResultStats');
 
@@ -1244,9 +1243,11 @@ async function runScopedExplorerSearch() {
     });
     const data = await res.json();
 
-    const blockedText = (data.blocked_departments || []).length
+    const hasBlocked = (data.blocked_departments || []).length > 0;
+    const isUnrestricted = (data.allowed_departments || []).includes('all');
+    const blockedText = hasBlocked
       ? `Blocked Partitions: <strong>${data.blocked_departments.join(', ')}</strong> (Zero-Leak Verified)`
-      : `Access: Unrestricted (Root/Admin)`;
+      : (isUnrestricted ? `Access: Unrestricted (Root/Admin)` : `Access: Scoped Partition Access`);
 
     if (stats) {
       stats.innerHTML = `
@@ -1292,7 +1293,7 @@ async function runScopedExplorerSearch() {
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.innerHTML = origBtnText;
+      btn.innerHTML = 'Test Scoped Query';
     }
   }
 }

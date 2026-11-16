@@ -341,8 +341,35 @@ def api_clear_logs():
 @app.post("/api/rag/search", tags=["Knowledge Vault"])
 def api_scoped_rag_search(req: ScopedSearchRequest):
     """Live Scoped Vector Explorer: demonstrates ChromaDB partition enforcement per role."""
+    global _active_org
     if req.role_id:
         role = _active_org.get_role(req.role_id)
+        if not role:
+            alias_map = {
+                "sales_representative": "sales_rep",
+                "sales_rep": "sales_representative",
+                "ceo": "chief_executive_officer",
+                "chief_executive_officer": "ceo",
+                "engineering_manager": "eng_manager",
+                "eng_manager": "engineering_manager",
+            }
+            alt_id = alias_map.get(req.role_id)
+            if alt_id:
+                role = _active_org.get_role(alt_id)
+
+        if not role:
+            gen_path = BASE_DIR / "org" / "templates" / "generated_active.yaml"
+            if gen_path.exists():
+                try:
+                    gen_org = load_org(str(gen_path))
+                    matched_role = gen_org.get_role(req.role_id)
+                    if matched_role:
+                        _active_org = gen_org
+                        sync_policies_from_org(_active_org)
+                        role = matched_role
+                except Exception:
+                    pass
+
         if not role:
             raise HTTPException(status_code=404, detail=f"Role '{req.role_id}' not found")
         scopes = role.permissions.data_scopes

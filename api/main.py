@@ -30,9 +30,17 @@ from agents.build_graph import load_org, run_company_task
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_ORG_PATH = BASE_DIR / "org" / "templates" / "default_org.yaml"
+ACTIVE_GEN_PATH = BASE_DIR / "org" / "templates" / "generated_active.yaml"
 STATIC_HTML = Path(__file__).resolve().parent / "static" / "index.html"
 
-_active_org: OrgChart = load_org(str(DEFAULT_ORG_PATH))
+if ACTIVE_GEN_PATH.exists():
+    try:
+        _active_org: OrgChart = load_org(str(ACTIVE_GEN_PATH))
+    except Exception:
+        _active_org: OrgChart = load_org(str(DEFAULT_ORG_PATH))
+else:
+    _active_org: OrgChart = load_org(str(DEFAULT_ORG_PATH))
+
 sync_policies_from_org(_active_org)
 _run_history: List[Dict[str, Any]] = []
 
@@ -128,9 +136,16 @@ def get_current_org():
 
 @app.post("/api/org/generate", tags=["Organization"])
 def api_generate_org(req: GenerateOrgRequest):
+    global _active_org
     if not req.business_summary.strip():
         raise HTTPException(status_code=400, detail="business_summary cannot be empty")
     chart_dict, errors = generate_org_chart(req.business_summary)
+    try:
+        org = OrgChart(**chart_dict)
+        _active_org = org
+        sync_policies_from_org(_active_org)
+    except Exception:
+        pass
     return {"org_chart": chart_dict, "validation_errors": errors}
 
 
@@ -251,7 +266,34 @@ def api_security_probe():
 @app.post("/api/tools/test", tags=["Security & Governance"])
 def api_test_role_tool(req: RoleToolTestRequest):
     """Interactive sandbox to test whether a specific role can execute a given MCP tool."""
+    global _active_org
     role = _active_org.get_role(req.role_id)
+    if not role:
+        alias_map = {
+            "sales_representative": "sales_rep",
+            "sales_rep": "sales_representative",
+            "ceo": "chief_executive_officer",
+            "chief_executive_officer": "ceo",
+            "eng_manager": "engineering_manager",
+            "engineering_manager": "eng_manager",
+        }
+        alt_id = alias_map.get(req.role_id)
+        if alt_id:
+            role = _active_org.get_role(alt_id)
+
+    if not role:
+        gen_path = BASE_DIR / "org" / "templates" / "generated_active.yaml"
+        if gen_path.exists():
+            try:
+                gen_org = load_org(str(gen_path))
+                matched_role = gen_org.get_role(req.role_id)
+                if matched_role:
+                    _active_org = gen_org
+                    sync_policies_from_org(_active_org)
+                    role = matched_role
+            except Exception:
+                pass
+
     if not role:
         raise HTTPException(status_code=404, detail=f"Role '{req.role_id}' not found in active org")
 

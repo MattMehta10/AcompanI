@@ -902,33 +902,23 @@ async function testRoleTool() {
     });
     const data = await res.json();
 
-    const hitl = document.getElementById('hitlQueue');
-    if (data.result.startsWith('ALLOWED')) {
-      sfx.pass();
-      if (resBox) {
-        resBox.innerHTML = `
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-            <span class="pill pill-green" style="font-weight:700;">✓ PERMITTED</span>
-            <span class="card-sub" style="color:#34d399;">Casbin RBAC Policy Passed</span>
-          </div>
-          <div style="font-size:12px; color:#e4e4e7; line-height:1.4;">${escapeHtml(data.result)}</div>`;
-      }
-      if (hitl) hitl.style.display = 'none';
-    } else if (data.result.startsWith('PENDING_APPROVAL')) {
+    if (!res.ok) {
       sfx.denied();
       if (resBox) {
         resBox.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-            <span class="pill pill-amber" style="font-weight:700;">⚠️ HITL GATE TRIGGERED</span>
-            <span class="card-sub" style="color:#fbbf24;">High-Risk Operation Quarantined</span>
+            <span class="pill pill-red" style="font-weight:700;">✕ ERROR (${res.status})</span>
+            <span class="card-sub" style="color:#f87171;">Policy Check Failed</span>
           </div>
-          <div style="font-size:12px; color:#fde68a; line-height:1.4;">${escapeHtml(data.result)}</div>`;
+          <div style="font-size:12px; color:#fca5a5; line-height:1.4;">${escapeHtml(data.detail || 'Role not found or server error')}</div>`;
       }
-      if (hitl) {
-        hitl.style.display = 'flex';
-        document.getElementById('hitlDesc').textContent = `Role "${selectedRoleId}" requested high-risk action "${toolName}". Human approval required.`;
-      }
-    } else {
+      return;
+    }
+
+    const resultText = String(data.result || '');
+    const hitl = document.getElementById('hitlQueue');
+
+    if (resultText.startsWith('DENIED')) {
       sfx.denied();
       if (resBox) {
         resBox.innerHTML = `
@@ -936,14 +926,39 @@ async function testRoleTool() {
             <span class="pill pill-red" style="font-weight:700;">✕ ACCESS DENIED</span>
             <span class="card-sub" style="color:#f87171;">Least-Privilege Enforcement</span>
           </div>
-          <div style="font-size:12px; color:#fca5a5; line-height:1.4;">${escapeHtml(data.result)}</div>`;
+          <div style="font-size:12px; color:#fca5a5; line-height:1.4;">${escapeHtml(resultText)}</div>`;
+      }
+      if (hitl) hitl.style.display = 'none';
+    } else if (resultText.startsWith('PENDING_APPROVAL')) {
+      sfx.denied();
+      if (resBox) {
+        resBox.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <span class="pill pill-amber" style="font-weight:700;">⚠️ HITL GATE TRIGGERED</span>
+            <span class="card-sub" style="color:#fbbf24;">High-Risk Operation Quarantined</span>
+          </div>
+          <div style="font-size:12px; color:#fde68a; line-height:1.4;">${escapeHtml(resultText)}</div>`;
+      }
+      if (hitl) {
+        hitl.style.display = 'flex';
+        document.getElementById('hitlDesc').textContent = `Role "${selectedRoleId}" requested high-risk action "${toolName}". Human approval required.`;
+      }
+    } else {
+      sfx.pass();
+      if (resBox) {
+        resBox.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <span class="pill pill-green" style="font-weight:700;">✓ PERMITTED</span>
+            <span class="card-sub" style="color:#34d399;">Casbin RBAC Policy Passed</span>
+          </div>
+          <div style="font-size:12px; color:#e4e4e7; line-height:1.4;">${escapeHtml(resultText)}</div>`;
       }
       if (hitl) hitl.style.display = 'none';
     }
 
     await Promise.all([loadAuditLogs(), loadMetrics()]);
-    toast(`${selectedRoleId} → ${toolName}: ${data.result.startsWith('DENIED') ? 'DENIED' : (data.result.startsWith('PENDING_APPROVAL') ? 'Awaiting Approval' : 'ALLOWED')}`,
-      data.result.startsWith('DENIED') ? 'err' : 'ok');
+    toast(`${selectedRoleId} → ${toolName}: ${resultText.startsWith('DENIED') ? 'DENIED' : (resultText.startsWith('PENDING_APPROVAL') ? 'Awaiting Approval' : 'ALLOWED')}`,
+      resultText.startsWith('DENIED') ? 'err' : 'ok');
   } catch (err) {
     if (resBox) resBox.innerHTML = `<span style="color:#f87171;">Error testing tool: ${escapeHtml(err.message)}</span>`;
   } finally {

@@ -305,10 +305,11 @@ def api_test_role_tool(req: RoleToolTestRequest):
         "send_email": {"to": "buyer@enterprise.io", "subject": "AcompanI Proposal", "body": "Attached proposal."},
     }
     kwargs = sample_args.get(req.tool_name, {})
+    is_hitl = role.human_approval_required or (req.tool_name == "send_email")
     result = guarded_tool_call(
         role_id=role.id,
         tool_name=req.tool_name,
-        human_approval_required=role.human_approval_required,
+        human_approval_required=is_hitl,
         approved=req.approved,
         **kwargs,
     )
